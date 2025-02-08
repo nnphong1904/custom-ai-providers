@@ -1,3 +1,21 @@
+# AI Provider Integration Todo List
+
+- [ ] Azure OpenAI Service
+- [ ] Anthropic
+- [ ] Amazon Bedrock
+- [ ] Google Generative AI / Vertex AI
+- [ ] Mistral AI
+- [ ] xAI Grok
+- [ ] Together.ai
+- [ ] Cohere
+- [ ] Fireworks AI
+- [ ] DeepInfra
+- [ ] DeepSeek
+- [ ] Perplexity AI
+- [ ] Open Router
+- [ ] Hugging Face
+
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
