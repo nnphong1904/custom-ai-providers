@@ -4,8 +4,8 @@ export const modelFormSchema = z.object({
   apiKey: z.string().min(1, "API Key is required"),
   supportPlugins: z.boolean().default(false),
   supportVision: z.boolean().default(false),
-  supportSystem: z.boolean().default(false),
-  supportStreaming: z.boolean().default(false),
+  supportSystem: z.boolean().default(true),
+  supportStreaming: z.boolean().default(true),
   headers: z
     .array(
       z.object({

@@ -4,7 +4,7 @@
 - [ ] Anthropic
 - [ ] Amazon Bedrock
 - [ ] Google Generative AI / Vertex AI
-- [ ] Mistral AI
+- [x] Mistral AI
 - [ ] xAI Grok
 - [ ] Together.ai
 - [ ] Cohere
