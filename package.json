@@ -1,0 +1,56 @@
+{
+  "name": "custom-ai-providers",
+  "private": false,
+  "version": "0.0.6",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/custom-ai-providers.umd.cjs",
+  "module": "./dist/custom-ai-providers.js",
+  "exports": {
+    ".": {
+      "import": "./dist/custom-ai-providers.js",
+      "require": "./dist/custom-ai-providers.umd.cjs"
+    }
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "rm -rf dist && tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "prebuild": "rm -rf dist"
+  },
+  "dependencies": {
+    "@headlessui/react": "^2.2.0",
+    "@hookform/resolvers": "^3.10.0",
+    "@radix-ui/react-label": "^2.1.2",
+    "@radix-ui/react-switch": "^1.1.3",
+    "@tailwindcss/vite": "^4.0.3",
+    "@tanstack/react-query": "^5.66.0",
+    "clsx": "^2.1.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-hook-form": "^7.54.2",
+    "tailwind-merge": "^3.0.1",
+    "tailwindcss": "^4.0.3",
+    "uuid": "^11.0.5",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.19.0",
+    "@types/node": "^22.13.1",
+    "@types/react": "^19.0.8",
+    "@types/react-dom": "^19.0.3",
+    "@types/uuid": "^10.0.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "eslint": "^9.19.0",
+    "eslint-plugin-prettier": "^5.2.3",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-refresh": "^0.4.18",
+    "globals": "^15.14.0",
+    "typescript": "~5.7.2",
+    "typescript-eslint": "^8.22.0",
+    "vite": "^6.1.0"
+  }
+}
