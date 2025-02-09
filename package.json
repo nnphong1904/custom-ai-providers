@@ -1,16 +1,17 @@
 {
   "name": "custom-ai-providers",
   "private": false,
-  "version": "0.0.7",
+  "version": "0.0.8",
   "type": "module",
   "files": [
     "dist",
-    "lib/index.d.ts"
+    "lib"
   ],
-  "main": "./dist/custom-ai-providers.umd.cjs",
-  "module": "./dist/custom-ai-providers.js",
+  "main": "./dist/custom-ai-providers.js",
+  "types": "./lib/index.d.ts",
   "exports": {
     ".": {
+      "types": "./lib/index.d.ts",
       "import": "./dist/custom-ai-providers.js",
       "require": "./dist/custom-ai-providers.umd.cjs"
     }
@@ -52,6 +53,5 @@
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.22.0",
     "vite": "^6.1.0"
-  },
-  "types": "lib/index.d.ts"
+  }
 }
