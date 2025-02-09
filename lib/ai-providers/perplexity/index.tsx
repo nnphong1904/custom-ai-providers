@@ -22,7 +22,7 @@ const information: AIProviderInformation = {
       <a href="https://www.perplexity.ai/settings/api" className="font-bold" target="_blank">
         https://www.perplexity.ai/settings/api
       </a>{" "}
-      to get your API key.
+      to get your API key. Make sure to top up some money if needed.
     </p>
   ),
 };

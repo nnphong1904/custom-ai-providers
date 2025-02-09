@@ -22,7 +22,7 @@ const information: AIProviderInformation = {
       <a href="https://platform.deepseek.com/api_keys" className="font-bold" target="_blank">
         https://platform.deepseek.com/api_keys
       </a>{" "}
-      to create a new API key
+      to create a new API key. Make sure to top up some money if needed.
     </p>
   ),
 };

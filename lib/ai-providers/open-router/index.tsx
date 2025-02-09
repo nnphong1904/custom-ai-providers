@@ -23,7 +23,7 @@ const information: AIProviderInformation = {
       <a href="https://openrouter.ai/keys" className="font-bold" target="_blank">
         https://openrouter.ai/keys
       </a>{" "}
-      to create an API key.
+      to create an API key. Make sure to top up some money if needed.
     </p>
   ),
 };

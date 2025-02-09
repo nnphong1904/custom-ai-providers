@@ -21,7 +21,7 @@ const information: AIProviderInformation = {
       <a href="https://deepinfra.com/dash/api_keys" className="font-bold" target="_blank">
         https://deepinfra.com/settings/api
       </a>{" "}
-      to create your API key.
+      to create your API key. Make sure to top up some money if needed.
     </p>
   ),
   getModelIdInstruction: (

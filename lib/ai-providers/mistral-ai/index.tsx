@@ -23,7 +23,7 @@ const information: AIProviderInformation = {
       <a href="https://console.mistral.ai/user/api-keys/" className="font-bold">
         https://console.mistral.ai/user/api-keys/
       </a>{" "}
-      to create an API key
+      to create an API key. Make sure to top up some money if needed.
     </p>
   ),
 };
