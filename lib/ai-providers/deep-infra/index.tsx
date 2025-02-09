@@ -10,6 +10,7 @@ const information = {
     supportSystem: true,
     supportStreaming: true,
   },
+  apiKeyInstructions: null,
 };
 
 const buildDefaultHeaders = (apiKey: string) => {

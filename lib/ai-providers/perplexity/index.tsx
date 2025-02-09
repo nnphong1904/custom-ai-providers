@@ -11,6 +11,7 @@ const information = {
     supportSystem: true,
     supportStreaming: true,
   },
+  apiKeyInstructions: null,
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

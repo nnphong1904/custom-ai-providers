@@ -34,7 +34,6 @@ export function ModelForm({
       bodyParams: [],
     },
   });
-  console.log("🚀 ~ form:", form.formState.errors);
 
   const {
     fields: headerFields,
@@ -171,6 +170,7 @@ export function ModelForm({
               ) : null}
               {/* TODO: Add a short instructions to guide user to get the API key for each provider */}
             </div>
+            {providers[provider.id].information.apiKeyInstructions}
           </div>
           {/* Model lists with search */}
 

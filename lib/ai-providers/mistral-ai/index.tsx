@@ -12,6 +12,19 @@ const information = {
     supportSystem: true,
     supportStreaming: true,
   },
+  apiKeyInstructions: (
+    <p className="text-sm text-gray-500">
+      You can sign up from{" "}
+      <a href="https://mistral.ai/" className="font-bold">
+        https://mistral.ai/
+      </a>{" "}
+      or another service that provide MistralAI models. Once you have an account, go to{" "}
+      <a href="https://console.mistral.ai/user/api-keys/" className="font-bold">
+        https://console.mistral.ai/user/api-keys/
+      </a>{" "}
+      to create an API key
+    </p>
+  ),
 };
 
 const getModels = async (apiKey: string): Promise<Model[]> => {

@@ -12,6 +12,19 @@ const information = {
     supportSystem: true,
     supportStreaming: true,
   },
+  apiKeyInstructions: (
+    <p className="text-sm text-gray-500">
+      Go to{" "}
+      <a href="https://openrouter.ai/" className="font-bold" target="_blank">
+        https://openrouter.ai/
+      </a>{" "}
+      and create an account. After signing up, go to{" "}
+      <a href="https://openrouter.ai/keys" className="font-bold" target="_blank">
+        https://openrouter.ai/keys
+      </a>{" "}
+      to create an API key.
+    </p>
+  ),
 };
 
 const getModels = async (apiKey: string): Promise<Model[]> => {
