@@ -11,7 +11,19 @@ const information = {
     supportSystem: true,
     supportStreaming: true,
   },
-  apiKeyInstructions: null,
+  apiKeyInstructions: (
+    <p className="text-sm text-gray-500">
+      Go to{" "}
+      <a href="https://www.perplexity.ai/" className="font-bold" target="_blank">
+        https://www.perplexity.ai/
+      </a>{" "}
+      and sign up for an account. Then go to{" "}
+      <a href="https://www.perplexity.ai/settings/api" className="font-bold" target="_blank">
+        https://www.perplexity.ai/settings/api
+      </a>{" "}
+      to get your API key.
+    </p>
+  ),
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
