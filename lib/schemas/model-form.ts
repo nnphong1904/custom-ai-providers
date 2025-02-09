@@ -3,6 +3,7 @@ import { z } from "zod";
 export const modelFormSchema = z.object({
   apiKey: z.string().min(1, "API Key is required"),
   supportPlugins: z.boolean().default(false),
+  endpoint: z.string().url().min(1, "Endpoint is required"),
   supportVision: z.boolean().default(false),
   supportSystem: z.boolean().default(true),
   supportStreaming: z.boolean().default(true),

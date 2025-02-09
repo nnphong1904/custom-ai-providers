@@ -30,6 +30,7 @@ export function ModelForm({
     defaultValues: {
       apiKey: "",
       ...modelDefaultConfig,
+      endpoint: providers[provider.id].information.endpoint,
       headers: [],
       bodyParams: [],
     },
@@ -87,7 +88,7 @@ export function ModelForm({
               },
         },
         providerInfo: {
-          endpoint: providers[provider.id].information.endpoint,
+          endpoint: data.endpoint,
           iconUrl: providers[provider.id].information.icon,
           apiType: "openai",
         },
@@ -140,15 +141,37 @@ export function ModelForm({
         <div className="space-y-6">
           {/* API Key Input */}
           <div className="space-y-2">
-            <div className="flex flex-col sm:flex-row gap-3 w-full">
+            <div className="flex flex-col sm:flex-row gap-3 w-full items-end">
               <div className="flex-1">
-                <Input
-                  placeholder="Enter API Key"
-                  className="w-full"
-                  type="password"
-                  {...form.register("apiKey")}
-                  error={form.formState.errors.apiKey?.message}
-                />
+                {!providers[provider.id].information.endpoint ? (
+                  <div className="mb-2">
+                    <div className="flex w-full justify-between">
+                      <Label className="block text-sm font-medium text-gray-700">Endpoint</Label>
+                      <Label className="text-xs text-gray-500 ml-auto">
+                        * Must be compatible with /v1/chat/completions
+                      </Label>
+                    </div>
+                    <Input
+                      placeholder="https://localhost:8000/v1/chat/completions"
+                      className="w-full"
+                      type="text"
+                      {...form.register("endpoint")}
+                      error={form.formState.errors.endpoint?.message}
+                    />
+                  </div>
+                ) : null}
+                <div>
+                  <div className="flex w-full justify-between">
+                    <Label className="block text-sm font-medium text-gray-700">API Key</Label>
+                  </div>
+                  <Input
+                    placeholder="Enter API Key"
+                    className="w-full"
+                    type="password"
+                    {...form.register("apiKey")}
+                    error={form.formState.errors.apiKey?.message}
+                  />
+                </div>
               </div>
               {canGetModels ? (
                 <Button

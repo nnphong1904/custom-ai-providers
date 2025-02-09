@@ -6,6 +6,7 @@ const providers: Provider[] = Object.values(aiProviders).map((provider) => ({
   id: provider.information.id,
   name: provider.information.name,
 }));
+console.log("🚀 ~ constproviders:Provider[]=Object.values ~ providers:", providers);
 
 interface AiProvidersListProps {
   onSelect: (provider: Provider) => void;

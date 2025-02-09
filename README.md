@@ -1,7 +1,6 @@
-# AI Provider Integration Todo List
+# AI Provider supported
 
 - [ ] Azure OpenAI Service
-- [ ] Anthropic
 - [ ] Amazon Bedrock
 - [ ] Google Generative AI / Vertex AI
 - [x] Mistral AI
@@ -9,10 +8,10 @@
 - [ ] Together.ai
 - [ ] Cohere
 - [ ] Fireworks AI
-- [ ] DeepInfra
-- [ ] DeepSeek
-- [ ] Perplexity AI
-- [ ] Open Router
+- [x] DeepInfra
+- [x] DeepSeek
+- [x] Perplexity AI
+- [x] Open Router
 - [ ] Hugging Face
 
 
