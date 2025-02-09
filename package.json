@@ -13,12 +13,19 @@
     ".": {
       "types": "./lib/index.d.ts",
       "import": "./dist/custom-ai-providers.js",
-      "require": "./dist/custom-ai-providers.umd.cjs"
-    }
+      "require": "./dist/custom-ai-providers.cjs"
+    },
+    "./styles.css": "./dist/custom-ai-providers.css"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "tailwindcss": "^3.0.0"
   },
   "scripts": {
     "dev": "vite",
-    "build": "rm -rf dist && tsc -b && vite build",
+    "build": "rm -rf dist && npm run build:css && npm run build:js",
+    "build:css": "npx @tailwindcss/cli -i ./lib/style.css -o ./dist/style.css",
+    "build:js": "rm -rf dist && tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "prebuild": "rm -rf dist"

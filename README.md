@@ -33,9 +33,14 @@ yarn add custom-ai-providers
 pnpm add custom-ai-providers
 ```
 
+
 ## Quick Start
 
 ```typescript
+// add this into your entry point
+import "custom-ai-providers/styles.css";
+
+// import the library
 import { AIProviders } from 'custom-ai-providers';
 
 function App() {

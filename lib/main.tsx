@@ -6,6 +6,8 @@ import { Provider } from "@/types";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ModelConfig } from "@/utils/json-builder";
 
+import "./style.css";
+
 const queryClient = new QueryClient();
 
 function AIProviders({ onSave }: { onSave: (result: ModelConfig[]) => void }) {
