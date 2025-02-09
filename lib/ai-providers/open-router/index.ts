@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 const information = {
   id: "open-router",
   name: "Open Router",
-  endpoint: "https://openrouter.ai/api/v1/completions",
+  endpoint: "https://openrouter.ai/api/v1/chat/completions",
   icon: "https://openrouter.ai/icon.png",
   defaultConfig: {
     supportPlugins: true,
