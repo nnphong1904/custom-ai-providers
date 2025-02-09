@@ -7,8 +7,8 @@ const information = {
   endpoint: "https://api.mistral.ai/v1/chat/completions",
   icon: "https://docs.mistral.ai/img/logo.svg",
   defaultConfig: {
-    supportPlugins: true,
-    supportVision: true,
+    supportPlugins: false,
+    supportVision: false,
     supportSystem: true,
     supportStreaming: true,
   },

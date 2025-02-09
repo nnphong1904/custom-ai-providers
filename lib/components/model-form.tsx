@@ -10,6 +10,7 @@ import { useState, useEffect, useMemo } from "react";
 import { useDebounce } from "@/hooks/use-debounce";
 import { providers } from "@/ai-providers";
 import { buildModelConfigJson, ModelConfig } from "@/utils/json-builder";
+import { Label } from "@/components/form/label";
 
 export function ModelForm({
   provider,
@@ -33,6 +34,7 @@ export function ModelForm({
       bodyParams: [],
     },
   });
+  console.log("🚀 ~ form:", form.formState.errors);
 
   const {
     fields: headerFields,
@@ -71,8 +73,8 @@ export function ModelForm({
           headers: [...defaultHeaders, ...data.headers],
         },
         modelInfo: {
-          name: model.name,
-          id: model.id,
+          name: model.name || model.modelId,
+          id: model.modelId,
           contextLength: model.contextLength,
           description: model.description,
           pricePerMillionTokens: model.pricePerMillionTokens
@@ -96,9 +98,15 @@ export function ModelForm({
     onSave?.(jsons);
   };
 
+  const canGetModels = !!providers[provider.id].getModels;
+
   const getModels = useMutation({
-    mutationFn: ({ apiKey }: { apiKey: string }) => {
-      return providers[provider.id].getModels(apiKey);
+    mutationFn: async ({ apiKey }: { apiKey: string }) => {
+      if (providers[provider.id].getModels) {
+        const result = await providers[provider.id].getModels?.(apiKey);
+        return result;
+      }
+      return [];
     },
     onError: (error) => {
       console.error("Error fetching models:", error);
@@ -143,159 +151,224 @@ export function ModelForm({
                   error={form.formState.errors.apiKey?.message}
                 />
               </div>
-              <Button
-                type="button"
-                variant="primary"
-                onClick={async () => {
-                  if (!form.getValues("apiKey")) {
-                    form.setError("apiKey", {
-                      message: "API key is required",
-                    });
-                    return;
-                  }
-                  getModels.mutate({ apiKey: form.getValues("apiKey") });
-                }}
-                disabled={getModels.isPending}
-              >
-                {getModels.isPending ? "Checking..." : "Check API Key"}
-              </Button>
+              {canGetModels ? (
+                <Button
+                  type="button"
+                  variant="primary"
+                  onClick={async () => {
+                    if (!form.getValues("apiKey")) {
+                      form.setError("apiKey", {
+                        message: "API key is required",
+                      });
+                      return;
+                    }
+                    getModels.mutate({ apiKey: form.getValues("apiKey") });
+                  }}
+                  disabled={getModels.isPending}
+                >
+                  {getModels.isPending ? "Checking..." : "Check API Key"}
+                </Button>
+              ) : null}
               {/* TODO: Add a short instructions to guide user to get the API key for each provider */}
             </div>
           </div>
-
           {/* Model lists with search */}
-          <div className="space-y-2">
-            <h2 className="text-lg font-semibold">Available Models</h2>
-            <p className="text-sm text-gray-500">
-              Enter your API key to fetch available models from {provider.name}
-            </p>
-            {models.length === 0 ? (
-              <div className="rounded-lg border-2 border-dashed border-gray-200 p-8">
-                <div className="flex flex-col items-center justify-center text-center">
-                  <p className="mt-2 text-sm text-gray-500">No models available</p>
-                </div>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {/* Search Input */}
-                <div className="relative">
-                  <Input
-                    type="search"
-                    placeholder="Search models..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10"
-                  />
-                  <svg
-                    className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                    />
-                  </svg>
-                </div>
 
-                {/* Models Table */}
-                <div className="rounded-lg border border-gray-200">
-                  <div className="max-h-[400px] overflow-y-auto">
-                    <table className="w-full">
-                      <thead className="sticky top-0 bg-gray-50">
-                        <tr className="border-b border-gray-200">
-                          <th className="w-8 p-3">
-                            <input
-                              type="checkbox"
-                              className="rounded border-gray-300"
-                              onChange={(e) => {
-                                const isChecked = e.target.checked;
-                                if (isChecked) {
-                                  modelFields.forEach((_, index) => {
-                                    removeModel(index);
-                                  });
-                                  filteredModels.forEach((model) => {
-                                    appendModel(model);
-                                  });
-                                } else {
-                                  form.setValue("models", []);
-                                }
-                              }}
-                            />
-                          </th>
-                          <th className="p-3 text-left text-sm font-medium text-gray-900">Name</th>
-                          <th className="p-3 text-left text-sm font-medium text-gray-900">
-                            Context Length
-                          </th>
-                          <th className="p-3 text-left text-sm font-medium text-gray-900">Price</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {(filteredModels.length > 0 ? filteredModels : models).map((model) => (
-                          <tr key={model.id} className="border-b border-gray-200">
-                            <td className="p-3">
+          {canGetModels ? (
+            <div className="space-y-2">
+              <h2 className="text-lg font-semibold">Available Models</h2>
+              <p className="text-sm text-gray-500">
+                Enter your API key to fetch available models from {provider.name}
+              </p>
+              {models.length === 0 ? (
+                <div className="rounded-lg border-2 border-dashed border-gray-200 p-8">
+                  <div className="flex flex-col items-center justify-center text-center">
+                    <p className="mt-2 text-sm text-gray-500">No models available</p>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {/* Search Input */}
+                  <div className="relative">
+                    <Input
+                      type="search"
+                      placeholder="Search models..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="w-full pl-10"
+                    />
+                    <svg
+                      className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                      />
+                    </svg>
+                  </div>
+
+                  {/* Models Table */}
+                  <div className="rounded-lg border border-gray-200">
+                    <div className="max-h-[400px] overflow-y-auto">
+                      <table className="w-full">
+                        <thead className="sticky top-0 bg-gray-50">
+                          <tr className="border-b border-gray-200">
+                            <th className="w-8 p-3">
                               <input
                                 type="checkbox"
                                 className="rounded border-gray-300"
-                                checked={form.watch("models").some((m) => m.id === model.id)}
                                 onChange={(e) => {
-                                  if (e.target.checked) {
-                                    appendModel(model);
-                                  } else {
-                                    const index = modelFields.findIndex(
-                                      (m) => m.modelId === model.modelId,
-                                    );
-                                    if (index !== -1) {
+                                  const isChecked = e.target.checked;
+                                  if (isChecked) {
+                                    modelFields.forEach((_, index) => {
                                       removeModel(index);
-                                    }
+                                    });
+                                    filteredModels.forEach((model) => {
+                                      appendModel(model);
+                                    });
+                                  } else {
+                                    form.setValue("models", []);
                                   }
                                 }}
                               />
-                            </td>
-                            <td className="p-3">
-                              <div className="flex flex-col">
-                                <span className="text-sm font-medium text-gray-900">
-                                  {model.name}
-                                </span>
-                                <span className="text-sm text-gray-500">{model.id}</span>
-                              </div>
-                            </td>
-                            <td className="p-3 text-sm text-gray-900">
-                              {model.contextLength.toLocaleString()}
-                            </td>
-                            <td className="p-3 text-sm text-gray-900">
-                              {model.pricePerMillionTokens &&
-                              (model.pricePerMillionTokens.completion ||
-                                model.pricePerMillionTokens.prompt) ? (
-                                <div>
-                                  ${model.pricePerMillionTokens.prompt}/1M input tokens
-                                  <br />${model.pricePerMillionTokens.completion}/1M output tokens
-                                </div>
-                              ) : (
-                                "Free"
-                              )}
-                            </td>
+                            </th>
+                            <th className="p-3 text-left text-sm font-medium text-gray-900">
+                              Name
+                            </th>
+                            <th className="p-3 text-left text-sm font-medium text-gray-900">
+                              Context Length
+                            </th>
+                            <th className="p-3 text-left text-sm font-medium text-gray-900">
+                              Price
+                            </th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                        </thead>
+                        <tbody>
+                          {(filteredModels.length > 0 ? filteredModels : models).map((model) => (
+                            <tr key={model.id} className="border-b border-gray-200">
+                              <td className="p-3">
+                                <input
+                                  type="checkbox"
+                                  className="rounded border-gray-300"
+                                  checked={form.watch("models").some((m) => m.id === model.id)}
+                                  onChange={(e) => {
+                                    if (e.target.checked) {
+                                      appendModel(model);
+                                    } else {
+                                      const index = modelFields.findIndex(
+                                        (m) => m.modelId === model.modelId,
+                                      );
+                                      if (index !== -1) {
+                                        removeModel(index);
+                                      }
+                                    }
+                                  }}
+                                />
+                              </td>
+                              <td className="p-3">
+                                <div className="flex flex-col">
+                                  <span className="text-sm font-medium text-gray-900">
+                                    {model.name}
+                                  </span>
+                                  <span className="text-sm text-gray-500">{model.id}</span>
+                                </div>
+                              </td>
+                              <td className="p-3 text-sm text-gray-900">
+                                {model.contextLength.toLocaleString()}
+                              </td>
+                              <td className="p-3 text-sm text-gray-900">
+                                {model.pricePerMillionTokens &&
+                                (model.pricePerMillionTokens.completion ||
+                                  model.pricePerMillionTokens.prompt) ? (
+                                  <div>
+                                    ${model.pricePerMillionTokens.prompt}/1M input tokens
+                                    <br />${model.pricePerMillionTokens.completion}/1M output tokens
+                                  </div>
+                                ) : (
+                                  "Free"
+                                )}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
 
-                    {/* No Results Message */}
-                    {filteredModels.length === 0 && debouncedSearchTerm && (
-                      <div className="p-8 text-center">
-                        <p className="text-sm text-gray-500">
-                          No models found matching "{debouncedSearchTerm}"
-                        </p>
-                      </div>
-                    )}
+                      {/* No Results Message */}
+                      {filteredModels.length === 0 && debouncedSearchTerm && (
+                        <div className="p-8 text-center">
+                          <p className="text-sm text-gray-500">
+                            No models found matching "{debouncedSearchTerm}"
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <div className="flex space-x-4">
+                <div className="flex-1">
+                  <label className="block text-sm font-medium text-gray-700">Model ID</label>
+                  <Input
+                    type="text"
+                    placeholder="e.g., ggml-gpt4all-j-v1.3-groovy.bin"
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    {...form.register("models.0.modelId")}
+                  />
+                </div>
+                <div className="flex-1">
+                  <label className="block text-sm font-medium text-gray-700">Context Length</label>
+                  <Input
+                    type="number"
+                    // value={2048}
+                    defaultValue={2048}
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    {...form.register("models.0.contextLength", { valueAsNumber: true })}
+                  />
+                </div>
+              </div>
+              <div>
+                <Label className="block text-sm font-medium text-gray-700">
+                  Price for Cost Estimation (Optional)
+                </Label>
+                <div className="flex space-x-4 mt-1">
+                  <div className="flex-1">
+                    <Input
+                      type="number"
+                      placeholder="$ 0.00"
+                      className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      step={0.01}
+                      defaultValue={0}
+                      {...form.register("models.0.pricePerMillionTokens.prompt", {
+                        valueAsNumber: true,
+                      })}
+                    />
+                    <span className="text-sm text-gray-500">/1M input tokens</span>
+                  </div>
+                  <div className="flex-1">
+                    <Input
+                      type="number"
+                      placeholder="$ 0.00"
+                      step={0.01}
+                      defaultValue={0}
+                      className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      {...form.register("models.0.pricePerMillionTokens.completion", {
+                        valueAsNumber: true,
+                      })}
+                    />
+                    <span className="text-sm text-gray-500">/1M output tokens</span>
                   </div>
                 </div>
               </div>
-            )}
-          </div>
+            </div>
+          )}
 
           {/* Support Options */}
           <div className="space-y-4">
@@ -451,7 +524,6 @@ export function ModelForm({
               </div>
             </div>
           </div>
-
           {/* Submit Button */}
           <Button
             type="submit"

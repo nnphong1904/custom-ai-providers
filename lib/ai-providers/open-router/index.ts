@@ -7,8 +7,8 @@ const information = {
   endpoint: "https://openrouter.ai/api/v1/chat/completions",
   icon: "https://openrouter.ai/icon.png",
   defaultConfig: {
-    supportPlugins: true,
-    supportVision: true,
+    supportPlugins: false,
+    supportVision: false,
     supportSystem: true,
     supportStreaming: true,
   },

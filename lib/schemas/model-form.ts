@@ -26,9 +26,9 @@ export const modelFormSchema = z.object({
   models: z
     .array(
       z.object({
-        id: z.string(),
+        id: z.string().optional(),
         modelId: z.string(),
-        name: z.string(),
+        name: z.string().optional(),
         description: z.string().optional(),
         contextLength: z.number(),
         pricePerMillionTokens: z

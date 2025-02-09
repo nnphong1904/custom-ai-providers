@@ -2,8 +2,8 @@ import { ModelFormData } from "@/schemas/model-form";
 import { v4 as uuidv4 } from "uuid";
 
 interface PricePerMillionTokens {
-  prompt: number;
-  completion: number;
+  prompt?: number;
+  completion?: number;
 }
 
 export interface ModelConfig {
@@ -33,8 +33,8 @@ interface JsonBuilderInput {
     contextLength: number;
     description?: string;
     pricePerMillionTokens?: {
-      prompt: number;
-      completion: number;
+      prompt?: number;
+      completion?: number;
     } | null;
   };
   providerInfo: {
