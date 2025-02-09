@@ -8,7 +8,7 @@ import { ModelConfig } from "@/utils/json-builder";
 
 const queryClient = new QueryClient();
 
-export function AIProviders({ onSave }: { onSave: (result: ModelConfig[]) => void }) {
+function AIProviders({ onSave }: { onSave: (result: ModelConfig[]) => void }) {
   const [provider, setProvider] = useState<Provider | null>(null);
 
   const handleProviderSelect = (selectedProvider: Provider) => {
@@ -36,3 +36,6 @@ export function AIProviders({ onSave }: { onSave: (result: ModelConfig[]) => voi
     </QueryClientProvider>
   );
 }
+
+export type { ModelConfig };
+export { AIProviders };
