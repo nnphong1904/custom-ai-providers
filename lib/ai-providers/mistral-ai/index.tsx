@@ -1,7 +1,8 @@
 import { MistralModelDTO } from "@/ai-providers/mistral-ai/types";
+import { AIProviderInformation } from "@/ai-providers/type";
 import { Model } from "@/types";
 import { v4 as uuidv4 } from "uuid";
-const information = {
+const information: AIProviderInformation = {
   id: "mistral-ai",
   name: "Mistral AI",
   endpoint: "https://api.mistral.ai/v1/chat/completions",

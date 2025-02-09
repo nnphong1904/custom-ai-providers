@@ -1,7 +1,8 @@
 import { OpenRouterModelDTO } from "@/ai-providers/open-router/types";
+import { AIProviderInformation } from "@/ai-providers/type";
 import { Model } from "@/types";
 import { v4 as uuidv4 } from "uuid";
-const information = {
+const information: AIProviderInformation = {
   id: "open-router",
   name: "Open Router",
   endpoint: "https://openrouter.ai/api/v1/chat/completions",

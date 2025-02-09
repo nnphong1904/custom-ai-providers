@@ -1,6 +1,7 @@
+import { AIProviderInformation } from "@/ai-providers/type";
 import { Model } from "@/types";
 import { v4 as uuidv4 } from "uuid";
-const information = {
+const information: AIProviderInformation = {
   id: "perplexity",
   name: "Perplexity",
   endpoint: "https://api.perplexity.ai/chat/completions",

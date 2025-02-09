@@ -315,16 +315,17 @@ export function ModelForm({
             <div className="space-y-4">
               <div className="flex space-x-4">
                 <div className="flex-1">
-                  <label className="block text-sm font-medium text-gray-700">Model ID</label>
+                  <Label className="block text-sm font-medium text-gray-700">Model ID</Label>
                   <Input
                     type="text"
                     placeholder="e.g., ggml-gpt4all-j-v1.3-groovy.bin"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm mb-1"
                     {...form.register("models.0.modelId")}
                   />
+                  {providers[provider.id].information.getModelIdInstruction}
                 </div>
                 <div className="flex-1">
-                  <label className="block text-sm font-medium text-gray-700">Context Length</label>
+                  <Label className="block text-sm font-medium text-gray-700">Context Length</Label>
                   <Input
                     type="number"
                     // value={2048}
