@@ -1,4 +1,6 @@
-# AI Provider supported
+# AI Provider Integration Library
+
+A flexible and extensible TypeScript library for integrating various AI providers into your application. Currently supports:
 
 - [ ] Azure OpenAI Service
 - [ ] Amazon Bedrock
@@ -12,56 +14,114 @@
 - [x] DeepSeek
 - [x] Perplexity AI
 - [x] Open Router
-- [ ] Hugging Face
+- [x] Hugging Face
 
 
-# React + TypeScript + Vite
+## Features
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+- 📝 Form validation using Zod
+- 🎨 Prebuilt UI components
+- 📄 Output JSON data
 
-Currently, two official plugins are available:
+## Installation
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```bash
+npm install custom-ai-providers
+# or
+yarn add custom-ai-providers
+# or
+pnpm add custom-ai-providers
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## Quick Start
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+```typescript
+import { AIProviders } from 'custom-ai-providers';
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+function App() {
+  const handleSave = (configs) => {
+    console.log('Model configurations:', configs);
+  };
+
+  return (
+    <AIProviders onSave={handleSave} />
+  );
+}
 ```
+
+## Provider Configuration
+
+Each provider can be configured with:
+
+- API Key
+- Custom Headers
+- Body Parameters
+- Model Capabilities:
+  - Plugin Support
+  - Vision Support
+  - System Messages
+  - Streaming Output
+
+## Components
+
+### AIProviders
+Main component that handles provider selection and configuration.
+
+## Types
+
+```typescript
+interface ModelConfig {
+  title: string;
+  description: string;
+  iconUrl: string;
+  endpoint: string;
+  id: string;
+  modelID: string;
+  apiType: "openai" | "anthropic" | "custom";
+  contextLength: number;
+  headerRows: Array<{ key: string; value: string }>;
+  bodyRows: Array<{ key: string; value: string; type: string }>;
+  pluginSupported: boolean;
+  visionSupported: boolean;
+  systemMessageSupported: boolean;
+  streamOutputSupported: boolean;
+  skipAPIKey: boolean;
+  pricePerMillionTokens?: {
+    prompt?: number;
+    completion?: number;
+  } | null;
+}
+```
+
+## Adding New Providers
+
+To add a new provider:
+
+1. Create a new provider file in `lib/ai-providers/[provider-name]/index.tsx`
+2. Implement the required interface:
+   ```typescript
+   const provider = {
+     information: AIProviderInformation;
+     getModels?: (apiKey: string) => Promise<Model[]>;
+     buildDefaultHeaders: (apiKey: string) => Array<{ id: string; key: string; value: string }>;
+   };
+   ```
+3. Add the provider to `lib/ai-providers/index.ts`
+
+## Development
+
+```bash
+# Install dependencies
+npm install
+
+# Build library
+npm run build
+```
+
+## Contributing
+
+Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
+
+## License
+
+[MIT](LICENSE)
