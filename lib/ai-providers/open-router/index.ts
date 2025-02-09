@@ -6,6 +6,12 @@ const information = {
   name: "Open Router",
   endpoint: "https://openrouter.ai/api/v1/completions",
   icon: "https://openrouter.ai/icon.png",
+  defaultConfig: {
+    supportPlugins: true,
+    supportVision: true,
+    supportSystem: true,
+    supportStreaming: true,
+  },
 };
 
 const getModels = async (apiKey: string): Promise<Model[]> => {

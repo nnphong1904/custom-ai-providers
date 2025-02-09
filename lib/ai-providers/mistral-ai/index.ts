@@ -6,6 +6,12 @@ const information = {
   name: "Mistral AI",
   endpoint: "https://api.mistral.ai/v1/chat/completions",
   icon: "https://docs.mistral.ai/img/logo.svg",
+  defaultConfig: {
+    supportPlugins: true,
+    supportVision: true,
+    supportSystem: true,
+    supportStreaming: true,
+  },
 };
 
 const getModels = async (apiKey: string): Promise<Model[]> => {

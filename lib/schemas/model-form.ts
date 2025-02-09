@@ -39,6 +39,7 @@ export const modelFormSchema = z.object({
           .nullable(),
       }),
     )
+    .min(1, "At least one model is required")
     .default([]),
 });
 

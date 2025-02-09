@@ -22,18 +22,18 @@ export function ModelForm({
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
   const [filteredModels, setFilteredModels] = useState<typeof models>([]);
 
+  const modelDefaultConfig = providers[provider.id].information.defaultConfig;
+
   const form = useForm<ModelFormData>({
     resolver: zodResolver(modelFormSchema),
     defaultValues: {
       apiKey: "",
-      supportPlugins: false,
-      supportVision: false,
-      supportSystem: false,
-      supportStreaming: false,
+      ...modelDefaultConfig,
       headers: [],
       bodyParams: [],
     },
   });
+  console.log("🚀 ~ form:", form.formState.errors);
 
   const {
     fields: headerFields,
@@ -94,14 +94,11 @@ export function ModelForm({
       });
       return json;
     });
-    console.log("🚀 ~ onSubmit ~ jsons:", jsons);
     onSave?.(jsons);
   };
 
   const getModels = useMutation({
     mutationFn: ({ apiKey }: { apiKey: string }) => {
-      // console.log("🚀 ~ ModelForm ~ apiKey:", apiKey);
-
       return providers[provider.id].getModels(apiKey);
     },
     onError: (error) => {
@@ -421,11 +418,16 @@ export function ModelForm({
           <Button
             type="submit"
             variant="primary"
-            className="w-full"
+            className="flex-1"
             disabled={form.formState.isSubmitting}
           >
-            {form.formState.isSubmitting ? "Saving..." : "Save Model"}
+            {form.formState.isSubmitting ? "Saving..." : "Add Model"}
           </Button>
+          {Object.entries(form.formState.errors)[0] && (
+            <p className="mt-2 text-sm text-red-500">
+              {Object.entries(form.formState.errors)[0][1]?.message}
+            </p>
+          )}
         </div>
       </div>
     </form>
