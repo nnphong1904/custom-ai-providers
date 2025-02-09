@@ -1,32 +1,11 @@
 import { Button } from "@/components/form/button";
 import { Provider } from "@/types";
+import { providers as aiProviders } from "@/ai-providers";
 
-const providers: Provider[] = [
-  {
-    id: "mistral-ai",
-    name: "Mistral AI",
-  },
-  {
-    id: "openrouter",
-    name: "Open Router models",
-  },
-  {
-    id: "perplexity",
-    name: "Perplexity AI",
-  },
-  {
-    id: "azure",
-    name: "Azure OpenAI",
-  },
-  {
-    id: "localai",
-    name: "LocalAI (Vicuna, Alpaca, LLaMa, GPT4All, Dolly, etc.)",
-  },
-  {
-    id: "ollama",
-    name: "Ollama (Local models: Llava, Llama2, Mistral, Orca, etc.)",
-  },
-];
+const providers: Provider[] = Object.values(aiProviders).map((provider) => ({
+  id: provider.information.id,
+  name: provider.information.name,
+}));
 
 interface AiProvidersListProps {
   onSelect: (provider: Provider) => void;

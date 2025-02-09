@@ -4,10 +4,11 @@ import { ModelForm } from "@/components/model-form";
 import { Button } from "@/components/form/button";
 import { Provider } from "@/types";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ModelConfig } from "@/utils/json-builder";
 
 const queryClient = new QueryClient();
 
-export function SmartCustomModels() {
+export function AIProviders({ onSave }: { onSave: (result: ModelConfig[]) => void }) {
   const [provider, setProvider] = useState<Provider | null>(null);
 
   const handleProviderSelect = (selectedProvider: Provider) => {
@@ -28,7 +29,7 @@ export function SmartCustomModels() {
                 ← Back
               </Button>
             </div>
-            <ModelForm provider={provider} />
+            <ModelForm provider={provider} onSave={onSave} />
           </div>
         )}
       </div>

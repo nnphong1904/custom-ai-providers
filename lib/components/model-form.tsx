@@ -9,9 +9,15 @@ import { useMutation } from "@tanstack/react-query";
 import { useState, useEffect, useMemo } from "react";
 import { useDebounce } from "@/hooks/use-debounce";
 import { providers } from "@/ai-providers";
-import { buildModelConfigJson } from "@/utils/json-builder";
+import { buildModelConfigJson, ModelConfig } from "@/utils/json-builder";
 
-export function ModelForm({ provider }: { provider: Provider }) {
+export function ModelForm({
+  provider,
+  onSave,
+}: {
+  provider: Provider;
+  onSave: (result: ModelConfig[]) => void;
+}) {
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
   const [filteredModels, setFilteredModels] = useState<typeof models>([]);
@@ -88,12 +94,18 @@ export function ModelForm({ provider }: { provider: Provider }) {
       });
       return json;
     });
-    console.log("🚀 ~ onSubmit ~ jsons:", JSON.stringify(jsons));
+    console.log("🚀 ~ onSubmit ~ jsons:", jsons);
+    onSave?.(jsons);
   };
 
   const getModels = useMutation({
     mutationFn: ({ apiKey }: { apiKey: string }) => {
+      // console.log("🚀 ~ ModelForm ~ apiKey:", apiKey);
+
       return providers[provider.id].getModels(apiKey);
+    },
+    onError: (error) => {
+      console.error("Error fetching models:", error);
     },
   });
 
@@ -143,7 +155,7 @@ export function ModelForm({ provider }: { provider: Provider }) {
               <Button
                 type="button"
                 variant="primary"
-                onClick={() => {
+                onClick={async () => {
                   if (!form.getValues("apiKey")) {
                     form.setError("apiKey", {
                       message: "API key is required",
@@ -264,7 +276,9 @@ export function ModelForm({ provider }: { provider: Provider }) {
                               {model.contextLength.toLocaleString()}
                             </td>
                             <td className="p-3 text-sm text-gray-900">
-                              {model.pricePerMillionTokens ? (
+                              {model.pricePerMillionTokens &&
+                              (model.pricePerMillionTokens.completion ||
+                                model.pricePerMillionTokens.prompt) ? (
                                 <div>
                                   ${model.pricePerMillionTokens.prompt}/1M input tokens
                                   <br />${model.pricePerMillionTokens.completion}/1M output tokens

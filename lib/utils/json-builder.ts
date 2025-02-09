@@ -6,7 +6,7 @@ interface PricePerMillionTokens {
   completion: number;
 }
 
-interface ModelConfig {
+export interface ModelConfig {
   title: string;
   description: string;
   iconUrl: string;
