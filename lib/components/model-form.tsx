@@ -63,7 +63,7 @@ export function ModelForm({
   });
 
   const onSubmit = (data: ModelFormData) => {
-    const defaultHeaders = [providers[provider.id].buildAuthorizationHeader(data.apiKey)];
+    const defaultHeaders = [...providers[provider.id].buildDefaultHeaders(data.apiKey)];
     // Handle form submission
     const jsons = data.models.map((model) => {
       const json = buildModelConfigJson({

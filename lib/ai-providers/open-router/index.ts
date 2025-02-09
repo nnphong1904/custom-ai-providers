@@ -30,16 +30,26 @@ const getModels = async (apiKey: string): Promise<Model[]> => {
   return result;
 };
 
-const buildAuthorizationHeader = (apiKey: string) => {
-  return {
-    id: uuidv4(),
-    key: "Authorization",
-    value: `Bearer ${apiKey}`,
-  };
+const buildDefaultHeaders = (apiKey: string) => {
+  return [
+    {
+      id: uuidv4(),
+      key: "Authorization",
+      value: `Bearer ${apiKey}`,
+    },
+    {
+      key: "X-Title",
+      value: "TypingMind.com",
+    },
+    {
+      key: "HTTP-Referer",
+      value: "https://www.typingmind.com",
+    },
+  ];
 };
 
 export const openRouter = {
   information,
   getModels,
-  buildAuthorizationHeader,
+  buildDefaultHeaders,
 };
