@@ -5,7 +5,7 @@ const information: AIProviderInformation = {
   id: "perplexity",
   name: "Perplexity",
   endpoint: "https://api.perplexity.ai/chat/completions",
-  icon: "https://images.seeklogo.com/logo-png/51/1/perplexity-ai-logo-png_seeklogo-517845.png",
+  icon: "https://framerusercontent.com/images/rT6Gy5rUran71JjQcj4Y5ThtEg.png",
   defaultConfig: {
     supportPlugins: false,
     supportVision: false,

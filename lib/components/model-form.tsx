@@ -113,7 +113,7 @@ export function ModelForm({
           <img
             src={provider.icon}
             alt={`${provider.name} icon`}
-            className="h-12 w-12 rounded-lg shadow-sm"
+            className="h-12 w-12 rounded-lg shadow-sm p-2"
           />
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Add {provider.name} Model</h1>
