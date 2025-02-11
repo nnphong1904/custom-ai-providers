@@ -1,9 +1,9 @@
-import { AIProviders, ModelConfig } from "custom-ai-providers";
+import { AIProviders, JsonBuilderOutput } from "custom-ai-providers";
 import { useState } from "react";
 import "custom-ai-providers/styles.css";
 
 function App() {
-  const [result, setResult] = useState<ModelConfig[] | null>(null);
+  const [result, setResult] = useState<JsonBuilderOutput[] | null>(null);
 
   return (
     <div className="flex gap-4">

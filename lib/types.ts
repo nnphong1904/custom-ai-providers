@@ -23,7 +23,7 @@ interface PricePerMillionTokens {
   completion?: number;
 }
 
-export interface ModelConfig {
+export type ModelConfig = {
   title: string;
   description: string;
   iconUrl: string;
@@ -40,4 +40,4 @@ export interface ModelConfig {
   streamOutputSupported: boolean;
   skipAPIKey: boolean;
   pricePerMillionTokens?: PricePerMillionTokens | null;
-}
+};

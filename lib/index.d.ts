@@ -1,12 +1,12 @@
 import { ReactNode } from "react";
-import { JsonBuilderInput } from "@/utils/json-builder";
+import { JsonBuilderInput, JsonBuilderOutput } from "@/utils/json-builder";
 import { ModelConfig } from "@/types";
-
+import { AIProviderInformation } from "@/ai-providers/type";
 export interface AIProvidersProps {
   /**
    * Callback function that receives the model configurations after form submission
    */
-  onSave: (configs: ModelConfig[]) => void;
+  onSave: (configs: JsonBuilderOutput[]) => void;
 }
 
 /**
@@ -14,5 +14,5 @@ export interface AIProvidersProps {
  */
 export function AIProviders(props: AIProvidersProps): ReactNode;
 
-export function buildModelConfigJson(props: JsonBuilderInput): ModelConfig[];
-export { ModelConfig, JsonBuilderInput };
+export function buildModelConfigJson(props: JsonBuilderInput): JsonBuilderOutput[];
+export { ModelConfig, JsonBuilderInput, JsonBuilderOutput, AIProviderInformation };

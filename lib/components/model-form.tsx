@@ -4,12 +4,12 @@ import { Button } from "@/components/form/button";
 import { Input } from "@/components/form/input";
 import { Toggle } from "@/components/form/toggle";
 import { modelFormSchema, type ModelFormData } from "@/schemas/model-form";
-import { ModelConfig, Provider } from "@/types";
+import { Provider } from "@/types";
 import { useMutation } from "@tanstack/react-query";
 import { useState, useEffect, useMemo } from "react";
 import { useDebounce } from "@/hooks/use-debounce";
 import { providers } from "@/ai-providers";
-import { buildModelConfigJson } from "@/utils/json-builder";
+import { buildModelConfigJson, JsonBuilderOutput } from "@/utils/json-builder";
 import { Label } from "@/components/form/label";
 
 export function ModelForm({
@@ -17,7 +17,7 @@ export function ModelForm({
   onSave,
 }: {
   provider: Provider;
-  onSave: (result: ModelConfig[]) => void;
+  onSave: (result: JsonBuilderOutput[]) => void;
 }) {
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm, 300);

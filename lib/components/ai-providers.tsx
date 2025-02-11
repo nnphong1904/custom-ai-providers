@@ -1,12 +1,13 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState } from "react";
-import { ModelConfig, Provider } from "@/types";
+import { Provider } from "@/types";
 import { AiProvidersList } from "@/components/ai-providers-list";
 import { Button } from "@/components/form/button";
 import { ModelForm } from "@/components/model-form";
+import { JsonBuilderOutput } from "@/utils/json-builder";
 const queryClient = new QueryClient();
 
-export function AIProviders({ onSave }: { onSave: (result: ModelConfig[]) => void }) {
+export function AIProviders({ onSave }: { onSave: (result: JsonBuilderOutput[]) => void }) {
   const [provider, setProvider] = useState<Provider | null>(null);
 
   const handleProviderSelect = (selectedProvider: Provider) => {
