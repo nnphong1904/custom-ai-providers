@@ -1,5 +1,7 @@
+import { AIProviderName } from "@/ai-providers/type";
+
 export type Provider = {
-  id: string;
+  id: AIProviderName;
   name: string;
   icon: string;
 };
@@ -15,3 +17,27 @@ export type Model = {
     completion: number; //output per million tokens
   } | null;
 };
+
+interface PricePerMillionTokens {
+  prompt?: number;
+  completion?: number;
+}
+
+export interface ModelConfig {
+  title: string;
+  description: string;
+  iconUrl: string;
+  endpoint: string;
+  id: string;
+  modelID: string;
+  apiType: "openai" | "anthropic" | "custom";
+  contextLength: number;
+  headerRows: Array<{ key: string; value: string }>;
+  bodyRows: Array<{ key: string; value: string; type: string }>;
+  pluginSupported: boolean;
+  visionSupported: boolean;
+  systemMessageSupported: boolean;
+  streamOutputSupported: boolean;
+  skipAPIKey: boolean;
+  pricePerMillionTokens?: PricePerMillionTokens | null;
+}

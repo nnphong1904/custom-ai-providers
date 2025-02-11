@@ -1,91 +1,57 @@
+import { providers } from "@/ai-providers";
+import { AIProviderName } from "@/ai-providers/type";
 import { ModelFormData } from "@/schemas/model-form";
+import { ModelConfig } from "@/types";
 import { v4 as uuidv4 } from "uuid";
 
-interface PricePerMillionTokens {
-  prompt?: number;
-  completion?: number;
-}
-
-export interface ModelConfig {
-  title: string;
-  description: string;
-  iconUrl: string;
-  endpoint: string;
-  id: string;
-  modelID: string;
-  apiType: "openai" | "anthropic" | "custom";
-  contextLength: number;
-  headerRows: Array<{ key: string; value: string }>;
-  bodyRows: Array<{ key: string; value: string; type: string }>;
-  pluginSupported: boolean;
-  visionSupported: boolean;
-  systemMessageSupported: boolean;
-  streamOutputSupported: boolean;
-  skipAPIKey: boolean;
-  pricePerMillionTokens?: PricePerMillionTokens | null;
-}
-
 interface JsonBuilderInput {
-  formData: ModelFormData;
-  modelInfo: {
-    name: string;
-    id: string;
-    contextLength: number;
-    description?: string;
-    pricePerMillionTokens?: {
-      prompt?: number;
-      completion?: number;
-    } | null;
-  };
-  providerInfo: {
-    endpoint: string;
-    iconUrl: string;
-    apiType: "openai" | "anthropic" | "custom";
-    skipAPIKey?: boolean;
-  };
+  userInput: ModelFormData;
+  provider: AIProviderName;
 }
 
-export function buildModelConfigJson({
-  formData,
-  modelInfo,
-  providerInfo,
-}: JsonBuilderInput): ModelConfig {
-  return {
-    // Basic Information
-    title: modelInfo.name,
-    description: modelInfo.description ?? "", // Can be extended if needed
-    iconUrl: providerInfo.iconUrl,
-    endpoint: providerInfo.endpoint,
+export function buildModelConfigJson({ userInput, provider }: JsonBuilderInput): ModelConfig[] {
+  const providerInfo = providers[provider];
+  return userInput.models.map((modelInfo) => {
+    const defaultHeaders = providerInfo.buildDefaultHeaders(userInput.apiKey);
+    return {
+      // Basic Information
+      title: modelInfo.name || modelInfo.modelId,
+      description: modelInfo.description ?? "", // Can be extended if needed
+      iconUrl: providerInfo.information.icon,
+      endpoint: providerInfo.information.endpoint || userInput.endpoint,
 
-    // IDs
-    id: uuidv4(),
-    modelID: modelInfo.id,
+      // IDs
+      id: uuidv4(),
+      modelID: modelInfo.modelId,
 
-    // Provider Configuration
-    apiType: providerInfo.apiType,
-    contextLength: modelInfo.contextLength,
+      // Provider Configuration
+      // NOTE: This is a temporary value, we need to get the actual API type from the provider
+      apiType: "openai",
+      contextLength: modelInfo.contextLength,
 
-    // Headers and Body Parameters
-    headerRows: formData.headers.map((header) => ({
-      key: header.key,
-      value: header.value,
-    })),
-    bodyRows: formData.bodyParams.map((param) => ({
-      key: param.key,
-      value: param.value,
-      type: param.type,
-    })),
+      // Headers and Body Parameters
+      headerRows: [...defaultHeaders, ...userInput.headers].map((header) => ({
+        key: header.key,
+        value: header.value,
+      })),
+      bodyRows: userInput.bodyParams.map((param) => ({
+        key: param.key,
+        value: param.value,
+        type: param.type,
+      })),
 
-    // Feature Support
-    pluginSupported: formData.supportPlugins,
-    visionSupported: formData.supportVision,
-    systemMessageSupported: formData.supportSystem,
-    streamOutputSupported: formData.supportStreaming,
+      // Feature Support
+      pluginSupported: userInput.supportPlugins,
+      visionSupported: userInput.supportVision,
+      systemMessageSupported: userInput.supportSystem,
+      streamOutputSupported: userInput.supportStreaming,
 
-    // API Configuration
-    skipAPIKey: providerInfo.skipAPIKey ?? false,
+      // API Configuration
+      // NOTE: This is a temporary value, we need to get the actual API key from the provider
+      skipAPIKey: true,
 
-    // Pricing
-    pricePerMillionTokens: modelInfo.pricePerMillionTokens,
-  };
+      // Pricing
+      pricePerMillionTokens: modelInfo.pricePerMillionTokens,
+    };
+  });
 }

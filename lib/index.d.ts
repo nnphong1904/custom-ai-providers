@@ -1,26 +1,6 @@
 import { ReactNode } from "react";
-
-export interface ModelConfig {
-  title: string;
-  description: string;
-  iconUrl: string;
-  endpoint: string;
-  id: string;
-  modelID: string;
-  apiType: "openai" | "anthropic" | "custom";
-  contextLength: number;
-  headerRows: Array<{ key: string; value: string }>;
-  bodyRows: Array<{ key: string; value: string; type: string }>;
-  pluginSupported: boolean;
-  visionSupported: boolean;
-  systemMessageSupported: boolean;
-  streamOutputSupported: boolean;
-  skipAPIKey: boolean;
-  pricePerMillionTokens?: {
-    prompt?: number;
-    completion?: number;
-  } | null;
-}
+import { JsonBuilderInput } from "@/utils/json-builder";
+import { ModelConfig } from "@/types";
 
 export interface AIProvidersProps {
   /**
@@ -33,3 +13,6 @@ export interface AIProvidersProps {
  * Main component for AI provider configuration
  */
 export function AIProviders(props: AIProvidersProps): ReactNode;
+
+export function buildModelConfigJson(props: JsonBuilderInput): ModelConfig[];
+export { ModelConfig, JsonBuilderInput };

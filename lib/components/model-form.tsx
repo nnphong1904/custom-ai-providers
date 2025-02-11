@@ -4,12 +4,12 @@ import { Button } from "@/components/form/button";
 import { Input } from "@/components/form/input";
 import { Toggle } from "@/components/form/toggle";
 import { modelFormSchema, type ModelFormData } from "@/schemas/model-form";
-import { Provider } from "@/types";
+import { ModelConfig, Provider } from "@/types";
 import { useMutation } from "@tanstack/react-query";
 import { useState, useEffect, useMemo } from "react";
 import { useDebounce } from "@/hooks/use-debounce";
 import { providers } from "@/ai-providers";
-import { buildModelConfigJson, ModelConfig } from "@/utils/json-builder";
+import { buildModelConfigJson } from "@/utils/json-builder";
 import { Label } from "@/components/form/label";
 
 export function ModelForm({
@@ -64,36 +64,9 @@ export function ModelForm({
   });
 
   const onSubmit = (data: ModelFormData) => {
-    const defaultHeaders = [...providers[provider.id].buildDefaultHeaders(data.apiKey)];
-    // Handle form submission
-    const jsons = data.models.map((model) => {
-      const json = buildModelConfigJson({
-        formData: {
-          ...data,
-          headers: [...defaultHeaders, ...data.headers],
-        },
-        modelInfo: {
-          name: model.name || model.modelId,
-          id: model.modelId,
-          contextLength: model.contextLength,
-          description: model.description,
-          pricePerMillionTokens: model.pricePerMillionTokens
-            ? {
-                prompt: model.pricePerMillionTokens.prompt,
-                completion: model.pricePerMillionTokens.completion,
-              }
-            : {
-                prompt: 0,
-                completion: 0,
-              },
-        },
-        providerInfo: {
-          endpoint: data.endpoint,
-          iconUrl: providers[provider.id].information.icon,
-          apiType: "openai",
-        },
-      });
-      return json;
+    const jsons = buildModelConfigJson({
+      userInput: data,
+      provider: provider.id,
     });
     onSave?.(jsons);
   };

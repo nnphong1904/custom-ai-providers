@@ -1,5 +1,4 @@
-import { ModelConfig } from "@/utils/json-builder";
-import { AIProviders } from "custom-ai-providers";
+import { AIProviders, ModelConfig } from "custom-ai-providers";
 import { useState } from "react";
 import "custom-ai-providers/styles.css";
 
