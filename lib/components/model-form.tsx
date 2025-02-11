@@ -126,7 +126,7 @@ export function ModelForm({
         <div className="space-y-6">
           {/* API Key Input */}
           <div className="space-y-2">
-            <div className="flex flex-col sm:flex-row gap-3 w-full items-end">
+            <div className="flex gap-3 w-full items-end">
               <div className="flex-1">
                 {!providers[provider.id].information.endpoint ? (
                   <div className="mb-2">
