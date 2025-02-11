@@ -1,10 +1,10 @@
 import { AIProviderInformation } from "@/ai-providers/type";
 import { v4 as uuidv4 } from "uuid";
 const information: AIProviderInformation = {
-  id: "DeepInfra",
+  id: "deepinfra",
   name: "DeepInfra",
   endpoint: "https://api.deepinfra.com/v1/openai/chat/completions",
-  icon: "",
+  icon: "https://deepinfra.com/deepinfra-logo-64.webp",
   defaultConfig: {
     supportPlugins: false,
     supportVision: false,

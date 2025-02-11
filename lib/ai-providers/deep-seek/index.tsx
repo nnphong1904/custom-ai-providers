@@ -5,7 +5,7 @@ const information: AIProviderInformation = {
   id: "deep-seek",
   name: "DeepSeek",
   endpoint: "https://api.deepseek.com/v1/chat/completions",
-  icon: "",
+  icon: "https://custom.typingmind.com/assets/models/deepseek.png",
   defaultConfig: {
     supportPlugins: false,
     supportVision: false,

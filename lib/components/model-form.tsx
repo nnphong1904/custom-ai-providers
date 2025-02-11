@@ -136,7 +136,19 @@ export function ModelForm({
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="mx-auto w-full px-4">
       <div className="space-y-6">
-        <h1 className="text-2xl font-semibold">Add {provider.name} Model</h1>
+        <div className="flex items-center gap-4 bg-gray-50 p-6 rounded-lg border border-gray-200">
+          <img
+            src={provider.icon}
+            alt={`${provider.name} icon`}
+            className="h-12 w-12 rounded-lg shadow-sm"
+          />
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">Add {provider.name} Model</h1>
+            <p className="text-sm text-gray-500">
+              Configure your model settings and API credentials
+            </p>
+          </div>
+        </div>
 
         <div className="space-y-6">
           {/* API Key Input */}

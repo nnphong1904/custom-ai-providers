@@ -6,7 +6,7 @@ const information: AIProviderInformation = {
   id: "mistral-ai",
   name: "Mistral AI",
   endpoint: "https://api.mistral.ai/v1/chat/completions",
-  icon: "https://docs.mistral.ai/img/logo.svg",
+  icon: "https://cms.mistral.ai/assets/874b3897-e9d4-41d5-a96e-aee94bce4f3d",
   defaultConfig: {
     supportPlugins: false,
     supportVision: false,

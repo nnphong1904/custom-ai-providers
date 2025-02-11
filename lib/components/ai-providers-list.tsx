@@ -5,8 +5,8 @@ import { providers as aiProviders } from "@/ai-providers";
 const providers: Provider[] = Object.values(aiProviders).map((provider) => ({
   id: provider.information.id,
   name: provider.information.name,
+  icon: provider.information.icon,
 }));
-console.log("🚀 ~ constproviders:Provider[]=Object.values ~ providers:", providers);
 
 interface AiProvidersListProps {
   onSelect: (provider: Provider) => void;
@@ -23,7 +23,8 @@ export function AiProvidersList({ onSelect }: AiProvidersListProps) {
           className="w-full justify-start text-blue-500 bg-blue-50 hover:bg-blue-100"
           onClick={() => onSelect(provider)}
         >
-          → {provider.name}
+          <img src={provider.icon} alt={`${provider.name} icon`} className="mr-2 h-5 w-5" />
+          {provider.name}
         </Button>
       ))}
     </div>

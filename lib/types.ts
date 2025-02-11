@@ -1,6 +1,7 @@
 export type Provider = {
   id: string;
   name: string;
+  icon: string;
 };
 
 export type Model = {
