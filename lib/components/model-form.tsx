@@ -186,7 +186,6 @@ export function ModelForm({
                   {getModels.isPending ? "Checking..." : "Check API Key"}
                 </Button>
               ) : null}
-              {/* TODO: Add a short instructions to guide user to get the API key for each provider */}
             </div>
             {providers[provider.id].information.apiKeyInstructions}
           </div>
@@ -195,13 +194,12 @@ export function ModelForm({
           {canGetModels ? (
             <div className="space-y-2">
               <h2 className="text-lg font-semibold">Available Models</h2>
-              <p className="text-sm text-gray-500">
-                Enter your API key to fetch available models from {provider.name}
-              </p>
-              {models.length === 0 ? (
+              {!form.watch("apiKey") ? (
                 <div className="rounded-lg border-2 border-dashed border-gray-200 p-8">
                   <div className="flex flex-col items-center justify-center text-center">
-                    <p className="mt-2 text-sm text-gray-500">No models available</p>
+                    <p className="mt-2 text-sm text-gray-500">
+                      Please enter your API key to fetch available models
+                    </p>
                   </div>
                 </div>
               ) : (
@@ -329,98 +327,100 @@ export function ModelForm({
                                   )}
                                 </td>
                                 <td className="p-3">
-                                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                                    <span>Auto detected</span>
-                                    <Dialog>
-                                      <DialogTrigger asChild>
-                                        <button
-                                          type="button"
-                                          className="p-1 hover:bg-gray-100 rounded-full"
-                                        >
-                                          <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            width="14"
-                                            height="14"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            strokeWidth="2"
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
+                                  {form.watch("models").some((m) => m.id === model.id) && (
+                                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                                      <p>Auto detected</p>
+                                      <Dialog>
+                                        <DialogTrigger asChild>
+                                          <button
+                                            type="button"
+                                            className="p-1 hover:bg-gray-100 rounded-full"
                                           >
-                                            <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
-                                          </svg>
-                                        </button>
-                                      </DialogTrigger>
-                                      <DialogContent className="bg-white">
-                                        <DialogHeader>
-                                          <DialogTitle>Model Capabilities</DialogTitle>
-                                          <DialogDescription>
-                                            Configure the capabilities of this model
-                                          </DialogDescription>
-                                        </DialogHeader>
-                                        <div className="space-y-4 py-4">
-                                          <Toggle
-                                            label="Support Plugins (via OpenAI Functions)"
-                                            description={`Enable if the model supports the "functions" or "tool_calls" parameter.`}
-                                            checked={form.watch(
-                                              `models.${modelIndex}.supportPlugins`,
-                                            )}
-                                            onChange={(checked) =>
-                                              form.setValue(
+                                            <svg
+                                              xmlns="http://www.w3.org/2000/svg"
+                                              width="14"
+                                              height="14"
+                                              viewBox="0 0 24 24"
+                                              fill="none"
+                                              stroke="currentColor"
+                                              strokeWidth="2"
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                            >
+                                              <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
+                                            </svg>
+                                          </button>
+                                        </DialogTrigger>
+                                        <DialogContent className="bg-white">
+                                          <DialogHeader>
+                                            <DialogTitle>Model Capabilities</DialogTitle>
+                                            <DialogDescription>
+                                              Configure the capabilities of this model
+                                            </DialogDescription>
+                                          </DialogHeader>
+                                          <div className="space-y-4 py-4">
+                                            <Toggle
+                                              label="Support Plugins (via OpenAI Functions)"
+                                              description={`Enable if the model supports the "functions" or "tool_calls" parameter.`}
+                                              checked={form.watch(
                                                 `models.${modelIndex}.supportPlugins`,
-                                                checked,
-                                              )
-                                            }
-                                          />
-                                          <Toggle
-                                            label="Support OpenAI Vision"
-                                            description={`Enable if the model supports image input.`}
-                                            checked={form.watch(
-                                              `models.${modelIndex}.supportVision`,
-                                            )}
-                                            onChange={(checked) =>
-                                              form.setValue(
+                                              )}
+                                              onChange={(checked) =>
+                                                form.setValue(
+                                                  `models.${modelIndex}.supportPlugins`,
+                                                  checked,
+                                                )
+                                              }
+                                            />
+                                            <Toggle
+                                              label="Support OpenAI Vision"
+                                              description={`Enable if the model supports image input.`}
+                                              checked={form.watch(
                                                 `models.${modelIndex}.supportVision`,
-                                                checked,
-                                              )
-                                            }
-                                          />
-                                          <Toggle
-                                            label="Support System Role"
-                                            description={`Enable if the model supports the "system" role.`}
-                                            checked={form.watch(
-                                              `models.${modelIndex}.supportSystem`,
-                                            )}
-                                            onChange={(checked) =>
-                                              form.setValue(
+                                              )}
+                                              onChange={(checked) =>
+                                                form.setValue(
+                                                  `models.${modelIndex}.supportVision`,
+                                                  checked,
+                                                )
+                                              }
+                                            />
+                                            <Toggle
+                                              label="Support System Role"
+                                              description={`Enable if the model supports the "system" role.`}
+                                              checked={form.watch(
                                                 `models.${modelIndex}.supportSystem`,
-                                                checked,
-                                              )
-                                            }
-                                          />
-                                          <Toggle
-                                            label="Support Streaming Output"
-                                            description={`Enable if the model supports streaming output ("stream": true).`}
-                                            checked={form.watch(
-                                              `models.${modelIndex}.supportStreaming`,
-                                            )}
-                                            onChange={(checked) =>
-                                              form.setValue(
+                                              )}
+                                              onChange={(checked) =>
+                                                form.setValue(
+                                                  `models.${modelIndex}.supportSystem`,
+                                                  checked,
+                                                )
+                                              }
+                                            />
+                                            <Toggle
+                                              label="Support Streaming Output"
+                                              description={`Enable if the model supports streaming output ("stream": true).`}
+                                              checked={form.watch(
                                                 `models.${modelIndex}.supportStreaming`,
-                                                checked,
-                                              )
-                                            }
-                                          />
-                                        </div>
-                                        <DialogFooter>
-                                          <DialogClose asChild>
-                                            <Button type="button">Done</Button>
-                                          </DialogClose>
-                                        </DialogFooter>
-                                      </DialogContent>
-                                    </Dialog>
-                                  </div>
+                                              )}
+                                              onChange={(checked) =>
+                                                form.setValue(
+                                                  `models.${modelIndex}.supportStreaming`,
+                                                  checked,
+                                                )
+                                              }
+                                            />
+                                          </div>
+                                          <DialogFooter>
+                                            <DialogClose asChild>
+                                              <Button type="button">Done</Button>
+                                            </DialogClose>
+                                          </DialogFooter>
+                                        </DialogContent>
+                                      </Dialog>
+                                    </div>
+                                  )}
                                 </td>
                               </tr>
                             ),
