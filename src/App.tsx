@@ -3,7 +3,7 @@ import { useState } from "react";
 import "custom-ai-providers/styles.css";
 
 function App() {
-  const [result, setResult] = useState<JsonBuilderOutput[] | null>(null);
+  const [result, setResult] = useState<JsonBuilderOutput | null>(null);
 
   return (
     <div className="flex gap-4">

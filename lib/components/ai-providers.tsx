@@ -7,7 +7,7 @@ import { ModelForm } from "@/components/model-form";
 import { JsonBuilderOutput } from "@/utils/json-builder";
 const queryClient = new QueryClient();
 
-export function AIProviders({ onSave }: { onSave: (result: JsonBuilderOutput[]) => void }) {
+export function AIProviders({ onSave }: { onSave: (result: JsonBuilderOutput) => void }) {
   const [provider, setProvider] = useState<Provider | null>(null);
 
   const handleProviderSelect = (selectedProvider: Provider) => {
