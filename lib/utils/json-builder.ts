@@ -54,6 +54,9 @@ export function buildModelConfigJson({ userInput, provider }: JsonBuilderInput):
       visionSupported: modelInfo.supportVision,
       systemMessageSupported: modelInfo.supportSystem,
       streamOutputSupported: modelInfo.supportStreaming,
+      supportedParams: modelInfo.supportedParams
+        .filter((param) => param.enabled)
+        .map((param) => param.key),
 
       // API Configuration
       // NOTE: This is a temporary value, we need to get the actual API key from the provider

@@ -27,6 +27,15 @@ const information: AIProviderInformation = {
   ),
 };
 
+const supportedParams = [
+  "temperature",
+  "max_tokens",
+  "top_p",
+  "stream",
+  "presence_penalty",
+  "frequency_penalty",
+];
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const getModels = async (_apiKey: string): Promise<Model[]> => {
   return [
@@ -40,6 +49,7 @@ const getModels = async (_apiKey: string): Promise<Model[]> => {
         prompt: 2,
         completion: 8,
       },
+      supportedParams,
     },
     {
       id: "sonar-reasoning",
@@ -51,6 +61,7 @@ const getModels = async (_apiKey: string): Promise<Model[]> => {
         prompt: 1,
         completion: 5,
       },
+      supportedParams,
     },
     {
       id: "sonar-pro",
@@ -62,6 +73,7 @@ const getModels = async (_apiKey: string): Promise<Model[]> => {
         prompt: 3,
         completion: 15,
       },
+      supportedParams,
     },
     {
       id: "sonar",
@@ -73,6 +85,7 @@ const getModels = async (_apiKey: string): Promise<Model[]> => {
         prompt: 1,
         completion: 1,
       },
+      supportedParams,
     },
     {
       id: "llama-3.1-sonar-small-128k-online",
@@ -84,6 +97,7 @@ const getModels = async (_apiKey: string): Promise<Model[]> => {
         prompt: 0.2,
         completion: 0.2,
       },
+      supportedParams,
     },
     {
       id: "llama-3.1-sonar-large-128k-online",
@@ -95,6 +109,7 @@ const getModels = async (_apiKey: string): Promise<Model[]> => {
         prompt: 1,
         completion: 1,
       },
+      supportedParams,
     },
     {
       id: "llama-3.1-sonar-huge-128k-online",
@@ -106,6 +121,7 @@ const getModels = async (_apiKey: string): Promise<Model[]> => {
         prompt: 5,
         completion: 5,
       },
+      supportedParams,
     },
   ];
 };

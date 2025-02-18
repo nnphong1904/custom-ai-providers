@@ -38,6 +38,12 @@ export const modelFormSchema = z.object({
         supportVision: z.boolean().default(false),
         supportSystem: z.boolean().default(true),
         supportStreaming: z.boolean().default(true),
+        supportedParams: z.array(
+          z.object({
+            key: z.string(),
+            enabled: z.boolean().default(true),
+          }),
+        ),
       }),
     )
     .min(1, "At least one model is required")

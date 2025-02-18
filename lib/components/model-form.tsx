@@ -11,16 +11,17 @@ import { useDebounce } from "@/hooks/use-debounce";
 import { providers } from "@/ai-providers";
 import { buildModelConfigJson, JsonBuilderOutput } from "@/utils/json-builder";
 import { Label } from "@/components/form/label";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/form/dialog";
+import { ModelCapabilitiesDialog } from "@/components/model-capabilities-dialog";
+
+const defaultSupportedParams = [
+  "temperature",
+  "top_p",
+  "frequency_penalty",
+  "presence_penalty",
+  "max_tokens",
+  "stream",
+  "reasoning_effort",
+];
 
 export function ModelForm({
   provider,
@@ -37,12 +38,32 @@ export function ModelForm({
 
   const form = useForm<ModelFormData>({
     resolver: zodResolver(modelFormSchema),
-    defaultValues: {
+    values: {
       apiKey: "",
       ...modelDefaultConfig,
       endpoint: providers[provider.id].information.endpoint,
       headers: [],
       bodyParams: [],
+      models: [
+        {
+          modelId: "",
+          contextLength: 2048,
+          pricePerMillionTokens: {
+            prompt: 0,
+            completion: 0,
+          },
+          supportPlugins: false,
+          supportVision: false,
+          supportSystem: true,
+          supportStreaming: true,
+          supportedParams: providers[provider.id].getModels
+            ? []
+            : defaultSupportedParams.map((param) => ({
+                key: param,
+                enabled: param !== "reasoning_effort",
+              })),
+        },
+      ],
     },
   });
 
@@ -251,6 +272,11 @@ export function ModelForm({
                                         supportVision: false,
                                         supportSystem: true,
                                         supportStreaming: true,
+                                        supportedParams:
+                                          model.supportedParams?.map((param) => ({
+                                            key: param,
+                                            enabled: true,
+                                          })) || [],
                                       });
                                     });
                                   } else {
@@ -290,6 +316,11 @@ export function ModelForm({
                                           supportVision: false,
                                           supportSystem: true,
                                           supportStreaming: true,
+                                          supportedParams:
+                                            model.supportedParams?.map((param) => ({
+                                              key: param,
+                                              enabled: true,
+                                            })) || [],
                                         });
                                       } else {
                                         const index = modelFields.findIndex(
@@ -330,95 +361,11 @@ export function ModelForm({
                                   {form.watch("models").some((m) => m.id === model.id) && (
                                     <div className="flex items-center gap-2 text-sm text-gray-600">
                                       <p>Auto detected</p>
-                                      <Dialog>
-                                        <DialogTrigger asChild>
-                                          <button
-                                            type="button"
-                                            className="p-1 hover:bg-gray-100 rounded-full"
-                                          >
-                                            <svg
-                                              xmlns="http://www.w3.org/2000/svg"
-                                              width="14"
-                                              height="14"
-                                              viewBox="0 0 24 24"
-                                              fill="none"
-                                              stroke="currentColor"
-                                              strokeWidth="2"
-                                              strokeLinecap="round"
-                                              strokeLinejoin="round"
-                                            >
-                                              <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
-                                            </svg>
-                                          </button>
-                                        </DialogTrigger>
-                                        <DialogContent className="bg-white">
-                                          <DialogHeader>
-                                            <DialogTitle>Model Capabilities</DialogTitle>
-                                            <DialogDescription>
-                                              Configure the capabilities of this model
-                                            </DialogDescription>
-                                          </DialogHeader>
-                                          <div className="space-y-4 py-4">
-                                            <Toggle
-                                              label="Support Plugins (via OpenAI Functions)"
-                                              description={`Enable if the model supports the "functions" or "tool_calls" parameter.`}
-                                              checked={form.watch(
-                                                `models.${modelIndex}.supportPlugins`,
-                                              )}
-                                              onChange={(checked) =>
-                                                form.setValue(
-                                                  `models.${modelIndex}.supportPlugins`,
-                                                  checked,
-                                                )
-                                              }
-                                            />
-                                            <Toggle
-                                              label="Support OpenAI Vision"
-                                              description={`Enable if the model supports image input.`}
-                                              checked={form.watch(
-                                                `models.${modelIndex}.supportVision`,
-                                              )}
-                                              onChange={(checked) =>
-                                                form.setValue(
-                                                  `models.${modelIndex}.supportVision`,
-                                                  checked,
-                                                )
-                                              }
-                                            />
-                                            <Toggle
-                                              label="Support System Role"
-                                              description={`Enable if the model supports the "system" role.`}
-                                              checked={form.watch(
-                                                `models.${modelIndex}.supportSystem`,
-                                              )}
-                                              onChange={(checked) =>
-                                                form.setValue(
-                                                  `models.${modelIndex}.supportSystem`,
-                                                  checked,
-                                                )
-                                              }
-                                            />
-                                            <Toggle
-                                              label="Support Streaming Output"
-                                              description={`Enable if the model supports streaming output ("stream": true).`}
-                                              checked={form.watch(
-                                                `models.${modelIndex}.supportStreaming`,
-                                              )}
-                                              onChange={(checked) =>
-                                                form.setValue(
-                                                  `models.${modelIndex}.supportStreaming`,
-                                                  checked,
-                                                )
-                                              }
-                                            />
-                                          </div>
-                                          <DialogFooter>
-                                            <DialogClose asChild>
-                                              <Button type="button">Done</Button>
-                                            </DialogClose>
-                                          </DialogFooter>
-                                        </DialogContent>
-                                      </Dialog>
+                                      <ModelCapabilitiesDialog
+                                        modelIndex={modelIndex}
+                                        watch={form.watch}
+                                        setValue={form.setValue}
+                                      />
                                     </div>
                                   )}
                                 </td>
@@ -526,6 +473,43 @@ export function ModelForm({
                   checked={form.watch("models.0.supportStreaming")}
                   onChange={(checked) => form.setValue("models.0.supportStreaming", checked)}
                 />
+              </div>
+              <div className="space-y-2">
+                <Label className="block text-sm font-medium text-gray-700">
+                  Supported Parameters
+                </Label>
+                <div className="space-y-2">
+                  {defaultSupportedParams.map((param) => (
+                    <label key={param} className="flex items-center gap-2 text-sm text-gray-700">
+                      <input
+                        type="checkbox"
+                        className="h-4 w-4 rounded border-gray-300"
+                        checked={form
+                          .watch("models.0.supportedParams")
+                          ?.some((p) => p.key === param && p.enabled)}
+                        onChange={(e) => {
+                          const currentParams = form.watch("models.0.supportedParams") || [];
+                          const paramIndex = currentParams.findIndex((p) => p.key === param);
+
+                          if (paramIndex === -1) {
+                            form.setValue("models.0.supportedParams", [
+                              ...currentParams,
+                              { key: param, enabled: e.target.checked },
+                            ]);
+                          } else {
+                            const newParams = [...currentParams];
+                            newParams[paramIndex] = {
+                              ...newParams[paramIndex],
+                              enabled: e.target.checked,
+                            };
+                            form.setValue("models.0.supportedParams", newParams);
+                          }
+                        }}
+                      />
+                      {param}
+                    </label>
+                  ))}
+                </div>
               </div>
             </div>
           )}

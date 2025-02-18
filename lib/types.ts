@@ -9,6 +9,7 @@ export type Provider = {
 export type Model = {
   id: string;
   modelId: string;
+  supportedParams: string[];
   name: string;
   description: string;
   contextLength: number;
@@ -38,6 +39,7 @@ export type ModelConfig = {
   visionSupported: boolean;
   systemMessageSupported: boolean;
   streamOutputSupported: boolean;
+  supportedParams: string[];
   skipAPIKey: boolean;
   pricePerMillionTokens?: PricePerMillionTokens | null;
 };

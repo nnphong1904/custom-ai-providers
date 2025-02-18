@@ -2,6 +2,17 @@ import { OpenRouterModelDTO } from "@/ai-providers/open-router/types";
 import { AIProviderInformation } from "@/ai-providers/type";
 import { Model } from "@/types";
 import { v4 as uuidv4 } from "uuid";
+
+const supportedParams = [
+  "temperature",
+  "top_p",
+  "stream",
+  "presence_penalty",
+  "frequency_penalty",
+  "max_tokens",
+  "include_reasoning",
+];
+
 const information: AIProviderInformation = {
   id: "open-router",
   name: "Open Router",
@@ -46,6 +57,7 @@ const getModels = async (apiKey: string): Promise<Model[]> => {
       prompt: Number((Number(model.pricing.prompt) * 1000000).toFixed(1)),
       completion: Number((Number(model.pricing.completion) * 1000000).toFixed(1)),
     },
+    supportedParams,
   }));
   return result;
 };

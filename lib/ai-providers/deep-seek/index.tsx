@@ -40,6 +40,14 @@ const getModels = async (_apiKey: string): Promise<Model[]> => {
         prompt: 0.27,
         completion: 1.1,
       },
+      supportedParams: [
+        "frequency_penalty",
+        "presence_penalty",
+        "max_tokens",
+        "stream",
+        "top_p",
+        "temperature",
+      ],
     },
     {
       id: "deepseek-reasoner",
@@ -51,6 +59,7 @@ const getModels = async (_apiKey: string): Promise<Model[]> => {
         prompt: 0.55,
         completion: 2.19,
       },
+      supportedParams: ["max_tokens", "stream", "reasoning_effort"],
     },
   ];
 };

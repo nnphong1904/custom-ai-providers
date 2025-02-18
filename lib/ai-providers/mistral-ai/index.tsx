@@ -2,6 +2,16 @@ import { MistralModelDTO } from "@/ai-providers/mistral-ai/types";
 import { AIProviderInformation } from "@/ai-providers/type";
 import { Model } from "@/types";
 import { v4 as uuidv4 } from "uuid";
+
+const supportedParams = [
+  "temperature",
+  "top_p",
+  "stream",
+  "presence_penalty",
+  "frequency_penalty",
+  "max_tokens",
+];
+
 const information: AIProviderInformation = {
   id: "mistral-ai",
   name: "Mistral AI",
@@ -43,6 +53,7 @@ const getModels = async (apiKey: string): Promise<Model[]> => {
     description: model.description,
     contextLength: model.max_context_length,
     pricePerMillionTokens: null,
+    supportedParams,
   }));
   return result;
 };
