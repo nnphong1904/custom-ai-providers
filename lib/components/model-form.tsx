@@ -4,7 +4,7 @@ import { Button } from "@/components/form/button";
 import { Input } from "@/components/form/input";
 import { Toggle } from "@/components/form/toggle";
 import { modelFormSchema, type ModelFormData } from "@/schemas/model-form";
-import { Provider } from "@/types";
+import { Provider, Model } from "@/types";
 import { useMutation } from "@tanstack/react-query";
 import { useState, useEffect, useMemo } from "react";
 import { useDebounce } from "@/hooks/use-debounce";
@@ -32,38 +32,18 @@ export function ModelForm({
 }) {
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
-  const [filteredModels, setFilteredModels] = useState<typeof models>([]);
+  const [filteredModels, setFilteredModels] = useState<Model[]>([]);
 
-  const modelDefaultConfig = providers[provider.id].information.defaultConfig;
+  // const modelDefaultConfig = providers[provider.id].information.defaultConfig;
 
   const form = useForm<ModelFormData>({
     resolver: zodResolver(modelFormSchema),
-    values: {
+    defaultValues: {
       apiKey: "",
-      ...modelDefaultConfig,
       endpoint: providers[provider.id].information.endpoint,
       headers: [],
       bodyParams: [],
-      models: [
-        {
-          modelId: "",
-          contextLength: 2048,
-          pricePerMillionTokens: {
-            prompt: 0,
-            completion: 0,
-          },
-          supportPlugins: false,
-          supportVision: false,
-          supportSystem: true,
-          supportStreaming: true,
-          supportedParams: providers[provider.id].getModels
-            ? []
-            : defaultSupportedParams.map((param) => ({
-                key: param,
-                enabled: param !== "reasoning_effort",
-              })),
-        },
-      ],
+      models: [],
     },
   });
 
@@ -268,10 +248,6 @@ export function ModelForm({
                                     filteredModels.forEach((model) => {
                                       appendModel({
                                         ...model,
-                                        supportPlugins: false,
-                                        supportVision: false,
-                                        supportSystem: true,
-                                        supportStreaming: true,
                                         supportedParams:
                                           model.supportedParams?.map((param) => ({
                                             key: param,
@@ -312,10 +288,6 @@ export function ModelForm({
                                       if (e.target.checked) {
                                         appendModel({
                                           ...model,
-                                          supportPlugins: false,
-                                          supportVision: false,
-                                          supportSystem: true,
-                                          supportStreaming: true,
                                           supportedParams:
                                             model.supportedParams?.map((param) => ({
                                               key: param,
@@ -397,7 +369,29 @@ export function ModelForm({
                     type="text"
                     placeholder="e.g., ggml-gpt4all-j-v1.3-groovy.bin"
                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm mb-1"
-                    {...form.register("models.0.modelId")}
+                    {...form.register("models.0.modelId", {
+                      onChange: (e) => {
+                        const modelId = e.target.value;
+                        const capabilities = providers[provider.id].detectCapabilities(modelId);
+                        form.setValue("models.0.supportPlugins", capabilities.supportPlugins);
+                        form.setValue("models.0.supportVision", capabilities.supportVision);
+                        form.setValue("models.0.supportSystem", capabilities.supportSystem);
+                        form.setValue("models.0.supportStreaming", capabilities.supportStreaming);
+                        form.setValue("models.0.supportReasoning", capabilities.supportReasoning);
+                        form.setValue(
+                          "models.0.supportPromptCaching",
+                          capabilities.supportPromptCaching,
+                        );
+                        form.setValue(
+                          "models.0.supportAssistantFirstMessage",
+                          capabilities.supportAssistantFirstMessage,
+                        );
+                        form.setValue(
+                          "models.0.supportTokenEstimation",
+                          capabilities.supportTokenEstimation,
+                        );
+                      },
+                    })}
                   />
                   {providers[provider.id].information.getModelIdInstruction}
                 </div>
@@ -472,6 +466,32 @@ export function ModelForm({
                   description='Enable if the model supports streaming output ("stream": true).'
                   checked={form.watch("models.0.supportStreaming")}
                   onChange={(checked) => form.setValue("models.0.supportStreaming", checked)}
+                />
+                <Toggle
+                  label="Support Reasoning"
+                  description="Enable if the model supports reasoning capabilities."
+                  checked={form.watch("models.0.supportReasoning")}
+                  onChange={(checked) => form.setValue("models.0.supportReasoning", checked)}
+                />
+                <Toggle
+                  label="Support Prompt Caching"
+                  description="Enable if the model supports caching of prompts for better performance."
+                  checked={form.watch("models.0.supportPromptCaching")}
+                  onChange={(checked) => form.setValue("models.0.supportPromptCaching", checked)}
+                />
+                <Toggle
+                  label="Support Assistant First Message"
+                  description="Enable if the model supports starting conversations with an assistant message."
+                  checked={form.watch("models.0.supportAssistantFirstMessage")}
+                  onChange={(checked) =>
+                    form.setValue("models.0.supportAssistantFirstMessage", checked)
+                  }
+                />
+                <Toggle
+                  label="Support Token Estimation"
+                  description="Enable if the model supports estimating token counts for inputs and outputs."
+                  checked={form.watch("models.0.supportTokenEstimation")}
+                  onChange={(checked) => form.setValue("models.0.supportTokenEstimation", checked)}
                 />
               </div>
               <div className="space-y-2">

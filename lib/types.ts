@@ -1,10 +1,14 @@
 import { AIProviderName } from "@/ai-providers/type";
+import { modelCapabilitiesSchema } from "@/schemas/model-form";
+import z from "zod";
 
 export type Provider = {
   id: AIProviderName;
   name: string;
   icon: string;
 };
+
+export type ModelCapabilities = z.infer<typeof modelCapabilitiesSchema>;
 
 export type Model = {
   id: string;
@@ -17,7 +21,7 @@ export type Model = {
     prompt: number; //input per million tokens
     completion: number; //output per million tokens
   } | null;
-};
+} & ModelCapabilities;
 
 interface PricePerMillionTokens {
   prompt?: number;

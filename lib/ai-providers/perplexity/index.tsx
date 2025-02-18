@@ -1,17 +1,11 @@
 import { AIProviderInformation } from "@/ai-providers/type";
-import { Model } from "@/types";
+import { Model, ModelCapabilities } from "@/types";
 import { v4 as uuidv4 } from "uuid";
 const information: AIProviderInformation = {
   id: "perplexity",
   name: "Perplexity",
   endpoint: "https://api.perplexity.ai/chat/completions",
   icon: "https://framerusercontent.com/images/rT6Gy5rUran71JjQcj4Y5ThtEg.png",
-  defaultConfig: {
-    supportPlugins: false,
-    supportVision: false,
-    supportSystem: true,
-    supportStreaming: true,
-  },
   apiKeyInstructions: (
     <p className="text-sm text-gray-500">
       Go to{" "}
@@ -37,6 +31,20 @@ const supportedParams = [
 ];
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
+function detectCapabilities(_modelId: string): ModelCapabilities {
+  return {
+    supportPlugins: false,
+    supportVision: false,
+    supportSystem: true,
+    supportStreaming: true,
+    supportReasoning: false,
+    supportPromptCaching: false,
+    supportAssistantFirstMessage: false,
+    supportTokenEstimation: false,
+  };
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const getModels = async (_apiKey: string): Promise<Model[]> => {
   return [
     {
@@ -50,6 +58,7 @@ const getModels = async (_apiKey: string): Promise<Model[]> => {
         completion: 8,
       },
       supportedParams,
+      ...detectCapabilities("sonar-reasoning-pro"),
     },
     {
       id: "sonar-reasoning",
@@ -62,6 +71,7 @@ const getModels = async (_apiKey: string): Promise<Model[]> => {
         completion: 5,
       },
       supportedParams,
+      ...detectCapabilities("sonar-reasoning"),
     },
     {
       id: "sonar-pro",
@@ -74,6 +84,7 @@ const getModels = async (_apiKey: string): Promise<Model[]> => {
         completion: 15,
       },
       supportedParams,
+      ...detectCapabilities("sonar-pro"),
     },
     {
       id: "sonar",
@@ -86,6 +97,7 @@ const getModels = async (_apiKey: string): Promise<Model[]> => {
         completion: 1,
       },
       supportedParams,
+      ...detectCapabilities("sonar"),
     },
     {
       id: "llama-3.1-sonar-small-128k-online",
@@ -98,6 +110,7 @@ const getModels = async (_apiKey: string): Promise<Model[]> => {
         completion: 0.2,
       },
       supportedParams,
+      ...detectCapabilities("llama-3.1-sonar-small-128k-online"),
     },
     {
       id: "llama-3.1-sonar-large-128k-online",
@@ -110,6 +123,7 @@ const getModels = async (_apiKey: string): Promise<Model[]> => {
         completion: 1,
       },
       supportedParams,
+      ...detectCapabilities("llama-3.1-sonar-large-128k-online"),
     },
     {
       id: "llama-3.1-sonar-huge-128k-online",
@@ -122,6 +136,7 @@ const getModels = async (_apiKey: string): Promise<Model[]> => {
         completion: 5,
       },
       supportedParams,
+      ...detectCapabilities("llama-3.1-sonar-huge-128k-online"),
     },
   ];
 };
@@ -140,4 +155,5 @@ export const perplexity = {
   information,
   getModels,
   buildDefaultHeaders,
+  detectCapabilities,
 };

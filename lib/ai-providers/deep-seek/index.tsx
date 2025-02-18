@@ -1,17 +1,11 @@
 import { AIProviderInformation } from "@/ai-providers/type";
-import { Model } from "@/types";
+import { Model, ModelCapabilities } from "@/types";
 import { v4 as uuidv4 } from "uuid";
 const information: AIProviderInformation = {
   id: "deep-seek",
   name: "DeepSeek",
   endpoint: "https://api.deepseek.com/v1/chat/completions",
   icon: "https://custom.typingmind.com/assets/models/deepseek.png",
-  defaultConfig: {
-    supportPlugins: false,
-    supportVision: false,
-    supportSystem: true,
-    supportStreaming: true,
-  },
   apiKeyInstructions: (
     <p className="text-sm text-gray-500">
       First, you will need to sign up for a DeepSeek AI account at
@@ -26,6 +20,19 @@ const information: AIProviderInformation = {
     </p>
   ),
 };
+
+function detectCapabilities(modelId: string): ModelCapabilities {
+  return {
+    supportPlugins: true,
+    supportVision: false,
+    supportSystem: true,
+    supportStreaming: true,
+    supportReasoning: modelId === "deepseek-reasoner",
+    supportPromptCaching: true,
+    supportAssistantFirstMessage: false,
+    supportTokenEstimation: false,
+  };
+}
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const getModels = async (_apiKey: string): Promise<Model[]> => {
@@ -48,6 +55,7 @@ const getModels = async (_apiKey: string): Promise<Model[]> => {
         "top_p",
         "temperature",
       ],
+      ...detectCapabilities("deepseek-chat"),
     },
     {
       id: "deepseek-reasoner",
@@ -60,6 +68,7 @@ const getModels = async (_apiKey: string): Promise<Model[]> => {
         completion: 2.19,
       },
       supportedParams: ["max_tokens", "stream", "reasoning_effort"],
+      ...detectCapabilities("deepseek-reasoner"),
     },
   ];
 };
@@ -78,4 +87,5 @@ export const deepSeek = {
   information,
   getModels,
   buildDefaultHeaders,
+  detectCapabilities,
 };

@@ -1,16 +1,11 @@
 import { AIProviderInformation } from "@/ai-providers/type";
+import { ModelCapabilities } from "@/types";
 import { v4 as uuidv4 } from "uuid";
 const information: AIProviderInformation = {
   id: "hugging-face",
   name: "Hugging Face",
   endpoint: "",
   icon: "https://custom.typingmind.com/assets/models/huggingface.png",
-  defaultConfig: {
-    supportPlugins: false,
-    supportVision: false,
-    supportSystem: true,
-    supportStreaming: true,
-  },
   apiKeyInstructions: (
     <p className="text-sm text-gray-500">
       You should follow this{" "}
@@ -39,6 +34,20 @@ const information: AIProviderInformation = {
   ),
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function detectCapabilities(_modelId: string): ModelCapabilities {
+  return {
+    supportPlugins: true,
+    supportVision: true,
+    supportSystem: true,
+    supportStreaming: true,
+    supportReasoning: false,
+    supportPromptCaching: true,
+    supportAssistantFirstMessage: false,
+    supportTokenEstimation: false,
+  };
+}
+
 const buildDefaultHeaders = (apiKey: string) => {
   return [
     {
@@ -53,4 +62,5 @@ export const huggingFaceAi = {
   information,
   getModels: null,
   buildDefaultHeaders,
+  detectCapabilities,
 };

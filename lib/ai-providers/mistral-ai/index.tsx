@@ -1,6 +1,6 @@
 import { MistralModelDTO } from "@/ai-providers/mistral-ai/types";
 import { AIProviderInformation } from "@/ai-providers/type";
-import { Model } from "@/types";
+import { Model, ModelCapabilities } from "@/types";
 import { v4 as uuidv4 } from "uuid";
 
 const supportedParams = [
@@ -17,12 +17,6 @@ const information: AIProviderInformation = {
   name: "Mistral AI",
   endpoint: "https://api.mistral.ai/v1/chat/completions",
   icon: "https://cms.mistral.ai/assets/874b3897-e9d4-41d5-a96e-aee94bce4f3d",
-  defaultConfig: {
-    supportPlugins: false,
-    supportVision: false,
-    supportSystem: true,
-    supportStreaming: true,
-  },
   apiKeyInstructions: (
     <p className="text-sm text-gray-500">
       You can sign up from{" "}
@@ -37,6 +31,28 @@ const information: AIProviderInformation = {
     </p>
   ),
 };
+
+function detectCapabilities(modelId: string): ModelCapabilities {
+  return {
+    supportPlugins: [
+      "mistral-large",
+      "mistral-small",
+      "codestreal",
+      "ministral-8b",
+      "ministral-3b",
+      "pixtral-12b",
+      "pixtral-large",
+      "pixtral-nemo",
+    ].some((model) => modelId.includes(model)),
+    supportVision: true,
+    supportSystem: true,
+    supportStreaming: true,
+    supportReasoning: false,
+    supportPromptCaching: false,
+    supportAssistantFirstMessage: false,
+    supportTokenEstimation: false,
+  };
+}
 
 const getModels = async (apiKey: string): Promise<Model[]> => {
   const response = await fetch(`https://api.mistral.ai/v1/models`, {
@@ -54,6 +70,7 @@ const getModels = async (apiKey: string): Promise<Model[]> => {
     contextLength: model.max_context_length,
     pricePerMillionTokens: null,
     supportedParams,
+    ...detectCapabilities(model.id),
   }));
   return result;
 };
@@ -72,4 +89,5 @@ export const mistralAi = {
   information,
   getModels,
   buildDefaultHeaders,
+  detectCapabilities,
 };

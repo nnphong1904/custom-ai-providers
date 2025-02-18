@@ -13,12 +13,13 @@ export type AIProviderInformation = {
   name: string;
   endpoint: string;
   icon: string;
-  defaultConfig: {
-    supportPlugins: boolean;
-    supportVision: boolean;
-    supportSystem: boolean;
-    supportStreaming: boolean;
-  };
+  // defaultConfig: {
+  //   supportPlugins: boolean;
+  //   supportVision: boolean;
+  //   supportSystem: boolean;
+  //   supportStreaming: boolean;
+  //   supportReasoning: boolean;
+  // };
   apiKeyInstructions: ReactNode;
   getModelIdInstruction?: ReactNode;
 };

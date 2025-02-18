@@ -77,6 +77,34 @@ export function ModelCapabilitiesDialog({
               checked={watch(`models.${modelIndex}.supportStreaming`)}
               onChange={(checked) => setValue(`models.${modelIndex}.supportStreaming`, checked)}
             />
+            <Toggle
+              label="Support Reasoning"
+              description="Enable if the model supports reasoning capabilities."
+              checked={watch(`models.${modelIndex}.supportReasoning`)}
+              onChange={(checked) => setValue(`models.${modelIndex}.supportReasoning`, checked)}
+            />
+            <Toggle
+              label="Support Prompt Caching"
+              description="Enable if the model supports caching of prompts for better performance."
+              checked={watch(`models.${modelIndex}.supportPromptCaching`)}
+              onChange={(checked) => setValue(`models.${modelIndex}.supportPromptCaching`, checked)}
+            />
+            <Toggle
+              label="Support Assistant First Message"
+              description="Enable if the model supports starting conversations with an assistant message."
+              checked={watch(`models.${modelIndex}.supportAssistantFirstMessage`)}
+              onChange={(checked) =>
+                setValue(`models.${modelIndex}.supportAssistantFirstMessage`, checked)
+              }
+            />
+            <Toggle
+              label="Support Token Estimation"
+              description="Enable if the model supports estimating token counts for inputs and outputs."
+              checked={watch(`models.${modelIndex}.supportTokenEstimation`)}
+              onChange={(checked) =>
+                setValue(`models.${modelIndex}.supportTokenEstimation`, checked)
+              }
+            />
           </div>
 
           {supportedParams.length > 0 && (

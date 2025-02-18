@@ -49,11 +49,16 @@ export function buildModelConfigJson({ userInput, provider }: JsonBuilderInput):
         type: param.type,
       })),
 
-      // Feature Support
+      // Capabilities supported
       pluginSupported: modelInfo.supportPlugins,
       visionSupported: modelInfo.supportVision,
       systemMessageSupported: modelInfo.supportSystem,
       streamOutputSupported: modelInfo.supportStreaming,
+      reasoningSupported: modelInfo.supportReasoning,
+      promptCachingSupported: modelInfo.supportPromptCaching,
+      assistantFirstMessageSupported: modelInfo.supportAssistantFirstMessage,
+      tokenEstimationSupported: modelInfo.supportTokenEstimation,
+
       supportedParams: modelInfo.supportedParams
         .filter((param) => param.enabled)
         .map((param) => param.key),

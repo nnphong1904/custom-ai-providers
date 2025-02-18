@@ -1,5 +1,16 @@
 import { z } from "zod";
 
+export const modelCapabilitiesSchema = z.object({
+  supportPlugins: z.boolean().default(false),
+  supportVision: z.boolean().default(false),
+  supportSystem: z.boolean().default(true),
+  supportStreaming: z.boolean().default(true),
+  supportReasoning: z.boolean().default(false),
+  supportPromptCaching: z.boolean().default(false),
+  supportAssistantFirstMessage: z.boolean().default(false),
+  supportTokenEstimation: z.boolean().default(false),
+});
+
 export const modelFormSchema = z.object({
   apiKey: z.string().min(1, "API Key is required"),
   endpoint: z.string().url().min(1, "Endpoint is required"),
@@ -34,10 +45,7 @@ export const modelFormSchema = z.object({
             completion: z.number(),
           })
           .nullable(),
-        supportPlugins: z.boolean().default(false),
-        supportVision: z.boolean().default(false),
-        supportSystem: z.boolean().default(true),
-        supportStreaming: z.boolean().default(true),
+        ...modelCapabilitiesSchema.shape,
         supportedParams: z.array(
           z.object({
             key: z.string(),

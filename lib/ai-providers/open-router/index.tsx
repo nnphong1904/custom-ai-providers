@@ -1,8 +1,7 @@
 import { OpenRouterModelDTO } from "@/ai-providers/open-router/types";
 import { AIProviderInformation } from "@/ai-providers/type";
-import { Model } from "@/types";
+import { Model, ModelCapabilities } from "@/types";
 import { v4 as uuidv4 } from "uuid";
-
 const supportedParams = [
   "temperature",
   "top_p",
@@ -13,17 +12,26 @@ const supportedParams = [
   "include_reasoning",
 ];
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function detectCapabilities(_modelId: string): ModelCapabilities {
+  return {
+    supportPlugins: true,
+    supportVision: true,
+    supportSystem: true,
+    supportStreaming: true,
+    supportReasoning: true,
+    supportPromptCaching: true,
+    supportAssistantFirstMessage: false,
+    supportTokenEstimation: false,
+  };
+}
+
 const information: AIProviderInformation = {
   id: "open-router",
   name: "Open Router",
   endpoint: "https://openrouter.ai/api/v1/chat/completions",
   icon: "https://openrouter.ai/icon.png",
-  defaultConfig: {
-    supportPlugins: false,
-    supportVision: false,
-    supportSystem: true,
-    supportStreaming: true,
-  },
+
   apiKeyInstructions: (
     <p className="text-sm text-gray-500">
       Go to{" "}
@@ -58,6 +66,7 @@ const getModels = async (apiKey: string): Promise<Model[]> => {
       completion: Number((Number(model.pricing.completion) * 1000000).toFixed(1)),
     },
     supportedParams,
+    ...detectCapabilities(model.id),
   }));
   return result;
 };
@@ -84,4 +93,5 @@ export const openRouter = {
   information,
   getModels,
   buildDefaultHeaders,
+  detectCapabilities,
 };
