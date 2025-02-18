@@ -1,7 +1,7 @@
 {
   "name": "custom-ai-providers",
   "private": false,
-  "version": "0.0.11",
+  "version": "0.0.12",
   "type": "module",
   "files": [
     "dist",
