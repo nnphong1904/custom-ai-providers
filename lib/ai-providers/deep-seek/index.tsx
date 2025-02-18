@@ -88,4 +88,5 @@ export const deepSeek = {
   getModels,
   buildDefaultHeaders,
   detectCapabilities,
+  testModel: "deepseek-chat",
 };

@@ -94,4 +94,5 @@ export const openRouter = {
   getModels,
   buildDefaultHeaders,
   detectCapabilities,
+  testModel: "openrouter/auto",
 };

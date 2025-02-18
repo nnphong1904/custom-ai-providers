@@ -43,7 +43,28 @@ export function ModelForm({
       endpoint: providers[provider.id].information.endpoint,
       headers: [],
       bodyParams: [],
-      models: [],
+      models: providers[provider.id].getModels
+        ? []
+        : [
+            {
+              modelId: "",
+              contextLength: 2048,
+              pricePerMillionTokens: {
+                prompt: 0,
+                completion: 0,
+              },
+              supportPlugins: false,
+              supportVision: false,
+              supportSystem: true,
+              supportStreaming: true,
+              supportedParams: providers[provider.id].getModels
+                ? []
+                : defaultSupportedParams.map((param) => ({
+                    key: param,
+                    enabled: param !== "reasoning_effort",
+                  })),
+            },
+          ],
     },
   });
 
@@ -97,6 +118,34 @@ export function ModelForm({
     },
   });
 
+  const checkApiKey = useMutation({
+    mutationFn: async ({ apiKey }: { apiKey: string }) => {
+      const response = await fetch(providers[provider.id].information.endpoint, {
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify({
+          model: providers[provider.id].testModel,
+          messages: [{ role: "user", content: "Hello, world!" }],
+        }),
+      });
+      if (!response.ok) {
+        throw new Error("Invalid API key");
+      }
+    },
+    onSuccess: () => {
+      form.clearErrors("apiKey");
+      getModels.mutate({ apiKey: form.getValues("apiKey") });
+    },
+    onError: (error) => {
+      form.setError("apiKey", {
+        message: error.message,
+      });
+    },
+  });
+
   const models = useMemo(() => getModels.data ?? [], [getModels.data]);
 
   // Effect to handle search
@@ -137,8 +186,38 @@ export function ModelForm({
         <div className="space-y-6">
           {/* API Key Input */}
           <div className="space-y-2">
-            <div className="flex gap-3 w-full items-end">
+            <div className="flex gap-3 w-full">
               <div className="flex-1">
+                <div className="flex gap-3 items-end w-full mb-4">
+                  <div className="flex-1">
+                    <div className="flex w-full justify-between">
+                      <Label className="block text-sm font-medium text-gray-700">API Key</Label>
+                    </div>
+                    <Input
+                      placeholder="Enter API Key"
+                      className="w-full"
+                      type="password"
+                      {...form.register("apiKey")}
+                      error={form.formState.errors.apiKey?.message}
+                    />
+                  </div>
+                  <Button
+                    type="button"
+                    variant="primary"
+                    onClick={async () => {
+                      if (!form.getValues("apiKey")) {
+                        form.setError("apiKey", {
+                          message: "API key is required",
+                        });
+                        return;
+                      }
+                      checkApiKey.mutate({ apiKey: form.getValues("apiKey") });
+                    }}
+                    disabled={getModels.isPending || checkApiKey.isPending}
+                  >
+                    {checkApiKey.isPending || getModels.isPending ? "Checking..." : "Check API Key"}
+                  </Button>
+                </div>
                 {!providers[provider.id].information.endpoint ? (
                   <div className="mb-2">
                     <div className="flex w-full justify-between">
@@ -156,37 +235,7 @@ export function ModelForm({
                     />
                   </div>
                 ) : null}
-                <div>
-                  <div className="flex w-full justify-between">
-                    <Label className="block text-sm font-medium text-gray-700">API Key</Label>
-                  </div>
-                  <Input
-                    placeholder="Enter API Key"
-                    className="w-full"
-                    type="password"
-                    {...form.register("apiKey")}
-                    error={form.formState.errors.apiKey?.message}
-                  />
-                </div>
               </div>
-              {canGetModels ? (
-                <Button
-                  type="button"
-                  variant="primary"
-                  onClick={async () => {
-                    if (!form.getValues("apiKey")) {
-                      form.setError("apiKey", {
-                        message: "API key is required",
-                      });
-                      return;
-                    }
-                    getModels.mutate({ apiKey: form.getValues("apiKey") });
-                  }}
-                  disabled={getModels.isPending}
-                >
-                  {getModels.isPending ? "Checking..." : "Check API Key"}
-                </Button>
-              ) : null}
             </div>
             {providers[provider.id].information.apiKeyInstructions}
           </div>
@@ -195,7 +244,7 @@ export function ModelForm({
           {canGetModels ? (
             <div className="space-y-2">
               <h2 className="text-lg font-semibold">Available Models</h2>
-              {!form.watch("apiKey") ? (
+              {!form.watch("apiKey") || !getModels.data?.length ? (
                 <div className="rounded-lg border-2 border-dashed border-gray-200 p-8">
                   <div className="flex flex-col items-center justify-center text-center">
                     <p className="mt-2 text-sm text-gray-500">
@@ -539,7 +588,7 @@ export function ModelForm({
             <div>
               <button
                 type="button"
-                className="flex justify-between items-center w-full py-4 text-left"
+                className="flex gap-4 items-center  py-4 text-left cursor-pointer hover:bg-gray-50 transition-colors duration-200"
                 onClick={() => {
                   const el = document.getElementById("advanced-settings");
                   if (el) {
@@ -664,11 +713,16 @@ export function ModelForm({
             type="submit"
             variant="primary"
             className="w-full m-0"
-            disabled={form.formState.isSubmitting}
+            disabled={
+              form.formState.isSubmitting ||
+              checkApiKey.isPending ||
+              getModels.isPending ||
+              !!form.formState.errors.apiKey?.message
+            }
           >
             {form.formState.isSubmitting ? "Adding..." : "Add Model"}
           </Button>
-          {Object.entries(form.formState.errors)[0] && (
+          {!checkApiKey.isPending && Object.entries(form.formState.errors)[0] && (
             <p className="mt-2 text-sm text-red-500">
               {Object.entries(form.formState.errors)[0][1]?.message}
             </p>

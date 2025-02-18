@@ -71,4 +71,5 @@ export const deepInfra = {
   getModels: null,
   buildDefaultHeaders,
   detectCapabilities,
+  testModel: "meta-llama/Meta-Llama-3-70B-Instruct",
 };

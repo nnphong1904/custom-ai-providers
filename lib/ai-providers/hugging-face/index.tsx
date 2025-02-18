@@ -63,4 +63,5 @@ export const huggingFaceAi = {
   getModels: null,
   buildDefaultHeaders,
   detectCapabilities,
+  testModel: "",
 };

@@ -90,4 +90,5 @@ export const mistralAi = {
   getModels,
   buildDefaultHeaders,
   detectCapabilities,
+  testModel: "ministral-3b-2410",
 };

@@ -30,14 +30,13 @@ const supportedParams = [
   "frequency_penalty",
 ];
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function detectCapabilities(_modelId: string): ModelCapabilities {
+function detectCapabilities(modelId: string): ModelCapabilities {
   return {
     supportPlugins: false,
     supportVision: false,
     supportSystem: true,
     supportStreaming: true,
-    supportReasoning: false,
+    supportReasoning: modelId.includes("reasoning"),
     supportPromptCaching: false,
     supportAssistantFirstMessage: false,
     supportTokenEstimation: false,
@@ -156,4 +155,5 @@ export const perplexity = {
   getModels,
   buildDefaultHeaders,
   detectCapabilities,
+  testModel: "sonar",
 };
