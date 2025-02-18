@@ -1,10 +1,10 @@
 {
   "name": "custom-ai-providers",
   "private": false,
-  "version": "0.0.10",
+  "version": "0.0.11",
   "type": "module",
   "files": [
-  "dist",
+    "dist",
     "lib"
   ],
   "main": "./dist/custom-ai-providers.js",
