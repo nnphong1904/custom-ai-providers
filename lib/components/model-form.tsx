@@ -167,17 +167,19 @@ export function ModelForm({
   }, [debouncedSearchTerm, models]);
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="mx-auto w-full px-4">
+    <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
       <div className="space-y-6">
-        <div className="flex items-center gap-4 bg-gray-50 p-6 rounded-lg border border-gray-200">
+        <div className="flex items-center gap-4 bg-gray-50 dark:bg-gray-800/50 p-6 rounded-lg border border-gray-300 dark:border-gray-500">
           <img
             src={provider.icon}
             alt={`${provider.name} icon`}
-            className="h-12 w-12 rounded-lg shadow-sm p-2"
+            className="h-12 w-12 rounded-lg shadow-sm p-2 bg-white dark:bg-gray-900"
           />
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Add {provider.name} Model</h1>
-            <p className="text-sm text-gray-500">
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-[#ECECEC]">
+              Add {provider.name} Model
+            </h1>
+            <p className="text-sm text-gray-500 dark:text-[#ECECEC]/70">
               Configure your model settings and API credentials
             </p>
           </div>
@@ -191,7 +193,9 @@ export function ModelForm({
                 <div className="flex gap-3 items-end w-full mb-4">
                   <div className="flex-1">
                     <div className="flex w-full justify-between">
-                      <Label className="block text-sm font-medium text-gray-700">API Key</Label>
+                      <Label className="block text-sm font-medium text-gray-700 dark:text-[#ECECEC]">
+                        API Key
+                      </Label>
                     </div>
                     <Input
                       placeholder="Enter API Key"
@@ -221,8 +225,10 @@ export function ModelForm({
                 {!providers[provider.id].information.endpoint ? (
                   <div className="mb-2">
                     <div className="flex w-full justify-between">
-                      <Label className="block text-sm font-medium text-gray-700">Endpoint</Label>
-                      <Label className="text-xs text-gray-500 ml-auto">
+                      <Label className="block text-sm font-medium text-gray-700 dark:text-[#ECECEC]">
+                        Endpoint
+                      </Label>
+                      <Label className="text-xs text-gray-500 dark:text-[#ECECEC]/70 ml-auto">
                         * Must be compatible with /v1/chat/completions
                       </Label>
                     </div>
@@ -243,11 +249,13 @@ export function ModelForm({
 
           {canGetModels ? (
             <div className="space-y-2">
-              <h2 className="text-lg font-semibold">Available Models</h2>
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-[#ECECEC]">
+                Available Models
+              </h2>
               {!form.watch("apiKey") || !getModels.data?.length ? (
-                <div className="rounded-lg border-2 border-dashed border-gray-200 p-8">
+                <div className="rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-500 p-8">
                   <div className="flex flex-col items-center justify-center text-center">
-                    <p className="mt-2 text-sm text-gray-500">
+                    <p className="mt-2 text-sm text-gray-500 dark:text-[#ECECEC]/70">
                       Please enter your API key to fetch available models
                     </p>
                   </div>
@@ -264,7 +272,7 @@ export function ModelForm({
                       className="w-full pl-10"
                     />
                     <svg
-                      className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400"
+                      className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-[#ECECEC]/50"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -279,15 +287,15 @@ export function ModelForm({
                   </div>
 
                   {/* Models Table */}
-                  <div className="rounded-lg border border-gray-200">
+                  <div className="rounded-lg border border-gray-300 dark:border-gray-500">
                     <div className="max-h-[400px] overflow-y-auto">
                       <table className="w-full">
-                        <thead className="sticky top-0 bg-gray-50">
-                          <tr className="border-b border-gray-200">
+                        <thead className="sticky top-0 bg-gray-50 dark:bg-gray-800">
+                          <tr className="border-b border-gray-300 dark:border-gray-500">
                             <th className="w-8 p-3">
                               <input
                                 type="checkbox"
-                                className="rounded border-gray-300"
+                                className="rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700"
                                 onChange={(e) => {
                                   const isChecked = e.target.checked;
                                   if (isChecked) {
@@ -310,28 +318,31 @@ export function ModelForm({
                                 }}
                               />
                             </th>
-                            <th className="p-3 text-left text-sm font-medium text-gray-900">
+                            <th className="p-3 text-left text-sm font-medium text-gray-900 dark:text-[#ECECEC]">
                               Name
                             </th>
-                            <th className="p-3 text-left text-sm font-medium text-gray-900">
+                            <th className="p-3 text-left text-sm font-medium text-gray-900 dark:text-[#ECECEC]">
                               Context Length
                             </th>
-                            <th className="p-3 text-left text-sm font-medium text-gray-900">
+                            <th className="p-3 text-left text-sm font-medium text-gray-900 dark:text-[#ECECEC]">
                               Price
                             </th>
-                            <th className="p-3 text-left text-sm font-medium text-gray-900">
+                            <th className="p-3 text-left text-sm font-medium text-gray-900 dark:text-[#ECECEC]">
                               Capabilities
                             </th>
                           </tr>
                         </thead>
-                        <tbody>
+                        <tbody className="bg-white dark:bg-gray-900">
                           {(filteredModels.length > 0 ? filteredModels : models).map(
                             (model, modelIndex) => (
-                              <tr key={model.id} className="border-b border-gray-200">
+                              <tr
+                                key={model.id}
+                                className="border-b border-gray-300 dark:border-gray-500"
+                              >
                                 <td className="p-3">
                                   <input
                                     type="checkbox"
-                                    className="rounded border-gray-300"
+                                    className="rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700"
                                     checked={form.watch("models").some((m) => m.id === model.id)}
                                     onChange={(e) => {
                                       if (e.target.checked) {
@@ -356,16 +367,18 @@ export function ModelForm({
                                 </td>
                                 <td className="p-3">
                                   <div className="flex flex-col">
-                                    <span className="text-sm font-medium text-gray-900">
+                                    <span className="text-sm font-medium text-gray-900 dark:text-[#ECECEC]">
                                       {model.name}
                                     </span>
-                                    <span className="text-sm text-gray-500">{model.id}</span>
+                                    <span className="text-sm text-gray-500 dark:text-[#ECECEC]/70">
+                                      {model.id}
+                                    </span>
                                   </div>
                                 </td>
-                                <td className="p-3 text-sm text-gray-900">
+                                <td className="p-3 text-sm text-gray-900 dark:text-[#ECECEC]">
                                   {model.contextLength.toLocaleString()}
                                 </td>
-                                <td className="p-3 text-sm text-gray-900">
+                                <td className="p-3 text-sm text-gray-900 dark:text-[#ECECEC]">
                                   {model.pricePerMillionTokens &&
                                   (model.pricePerMillionTokens.completion ||
                                     model.pricePerMillionTokens.prompt) ? (
@@ -380,7 +393,7 @@ export function ModelForm({
                                 </td>
                                 <td className="p-3">
                                   {form.watch("models").some((m) => m.id === model.id) && (
-                                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                                    <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-[#ECECEC]/70">
                                       <p>Auto detected</p>
                                       <ModelCapabilitiesDialog
                                         modelIndex={modelIndex}
@@ -399,7 +412,7 @@ export function ModelForm({
                       {/* No Results Message */}
                       {filteredModels.length === 0 && debouncedSearchTerm && (
                         <div className="p-8 text-center">
-                          <p className="text-sm text-gray-500">
+                          <p className="text-sm text-gray-500 dark:text-[#ECECEC]/70">
                             No models found matching "{debouncedSearchTerm}"
                           </p>
                         </div>
@@ -413,7 +426,9 @@ export function ModelForm({
             <div className="space-y-4">
               <div className="flex space-x-4">
                 <div className="flex-1">
-                  <Label className="block text-sm font-medium text-gray-700">Model ID</Label>
+                  <Label className="block text-sm font-medium text-gray-700 dark:text-[#ECECEC]">
+                    Model ID
+                  </Label>
                   <Input
                     type="text"
                     placeholder="e.g., ggml-gpt4all-j-v1.3-groovy.bin"
@@ -442,13 +457,16 @@ export function ModelForm({
                       },
                     })}
                   />
-                  {providers[provider.id].information.getModelIdInstruction}
+                  <span className="text-gray-700 dark:text-[#ECECEC]">
+                    {providers[provider.id].information.getModelIdInstruction}
+                  </span>
                 </div>
                 <div className="flex-1">
-                  <Label className="block text-sm font-medium text-gray-700">Context Length</Label>
+                  <Label className="block text-sm font-medium text-gray-700 dark:text-[#ECECEC]">
+                    Context Length
+                  </Label>
                   <Input
                     type="number"
-                    // value={2048}
                     defaultValue={2048}
                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     {...form.register("models.0.contextLength", { valueAsNumber: true })}
@@ -456,7 +474,7 @@ export function ModelForm({
                 </div>
               </div>
               <div>
-                <Label className="block text-sm font-medium text-gray-700">
+                <Label className="block text-sm font-medium text-gray-700 dark:text-[#ECECEC]">
                   Price for Cost Estimation (Optional)
                 </Label>
                 <div className="flex space-x-4 mt-1">
@@ -471,7 +489,9 @@ export function ModelForm({
                         valueAsNumber: true,
                       })}
                     />
-                    <span className="text-sm text-gray-500">/1M input tokens</span>
+                    <span className="text-sm text-gray-500 dark:text-[#ECECEC]/70">
+                      /1M input tokens
+                    </span>
                   </div>
                   <div className="flex-1">
                     <Input
@@ -484,12 +504,14 @@ export function ModelForm({
                         valueAsNumber: true,
                       })}
                     />
-                    <span className="text-sm text-gray-500">/1M output tokens</span>
+                    <span className="text-sm text-gray-500 dark:text-[#ECECEC]/70">
+                      /1M output tokens
+                    </span>
                   </div>
                 </div>
               </div>
               <div className="space-y-2">
-                <Label className="block text-sm font-medium text-gray-700">
+                <Label className="block text-sm font-medium text-gray-700 dark:text-[#ECECEC]">
                   Model Capabilities
                 </Label>
                 <Toggle
@@ -544,12 +566,15 @@ export function ModelForm({
                 />
               </div>
               <div className="space-y-2">
-                <Label className="block text-sm font-medium text-gray-700">
+                <Label className="block text-sm font-medium text-gray-700 dark:text-[#ECECEC]">
                   Supported Parameters
                 </Label>
                 <div className="space-y-2">
                   {defaultSupportedParams.map((param) => (
-                    <label key={param} className="flex items-center gap-2 text-sm text-gray-700">
+                    <label
+                      key={param}
+                      className="flex items-center gap-2 text-sm text-gray-700 dark:text-[#ECECEC]"
+                    >
                       <input
                         type="checkbox"
                         className="h-4 w-4 rounded border-gray-300"
@@ -603,9 +628,9 @@ export function ModelForm({
                   }
                 }}
               >
-                <span className="text-lg font-semibold">Advanced Settings</span>
+                <span className="text-lg font-semibold dark:text-[#ECECEC]">Advanced Settings</span>
                 <svg
-                  className="w-5 h-5 transition-transform duration-300 transform"
+                  className="w-5 h-5 transition-transform duration-300 transform dark:stroke-[#ECECEC]"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -625,7 +650,7 @@ export function ModelForm({
               >
                 {/* Custom Headers */}
                 <div className="space-y-2 mb-6">
-                  <h3 className="text-lg font-semibold">Custom Headers</h3>
+                  <h3 className="text-lg font-semibold dark:text-[#ECECEC]">Custom Headers</h3>
                   {headerFields.map((field, index) => (
                     <div key={field.id} className="flex flex-col sm:flex-row gap-3">
                       <Input
@@ -653,7 +678,7 @@ export function ModelForm({
                   <Button
                     type="button"
                     variant="ghost"
-                    className="p-0 h-auto text-blue-500"
+                    className="p-0 h-auto text-blue-500 dark:text-blue-400"
                     onClick={() => appendHeader({ key: "", value: "" })}
                   >
                     + Add Custom Headers
@@ -662,11 +687,11 @@ export function ModelForm({
 
                 {/* Custom Body Params */}
                 <div className="space-y-2">
-                  <h3 className="text-lg font-semibold">Custom Body Params</h3>
+                  <h3 className="text-lg font-semibold dark:text-[#ECECEC]">Custom Body Params</h3>
                   {paramFields.map((field, index) => (
                     <div key={field.id} className="flex flex-col sm:flex-row gap-3">
                       <select
-                        className="rounded border p-2 w-full sm:w-auto"
+                        className="rounded border p-2 w-full sm:w-auto dark:bg-gray-800 dark:border-gray-600 dark:text-[#ECECEC]"
                         {...form.register(`bodyParams.${index}.type`)}
                       >
                         <option value="string">string</option>
@@ -699,7 +724,7 @@ export function ModelForm({
                   <Button
                     type="button"
                     variant="ghost"
-                    className="p-0 h-auto text-blue-500"
+                    className="p-0 h-auto text-blue-500 dark:text-blue-400"
                     onClick={() => appendParam({ type: "string", key: "", value: "" })}
                   >
                     + Add Custom Body Params

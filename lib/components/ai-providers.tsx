@@ -16,7 +16,7 @@ export function AIProviders({ onSave }: { onSave: (result: JsonBuilderOutput) =>
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="flex flex-col items-center w-full">
+      <div className="flex flex-col items-center w-full dark:bg-[#1F2937]">
         {!provider ? (
           // Show providers list when no provider is selected
           <AiProvidersList onSelect={handleProviderSelect} />
