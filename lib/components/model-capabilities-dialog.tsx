@@ -29,7 +29,10 @@ export function ModelCapabilitiesDialog({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button type="button" className="p-1 hover:bg-gray-100 rounded-full">
+        <button
+          type="button"
+          className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 hover:[&>svg]:stroke-blue-500 rounded-full transition-colors cursor-pointer"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="14"
@@ -40,19 +43,26 @@ export function ModelCapabilitiesDialog({
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
+            className="dark:stroke-[#ECECEC] hover:stroke-blue-500 dark:hover:stroke-blue-400"
           >
             <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
           </svg>
         </button>
       </DialogTrigger>
-      <DialogContent className="bg-white max-h-[85vh] flex flex-col">
+      <DialogContent className="bg-white dark:bg-gray-800 max-h-[85vh] flex flex-col">
         <DialogHeader>
-          <DialogTitle>Model Capabilities</DialogTitle>
-          <DialogDescription>Configure the capabilities of this model</DialogDescription>
+          <DialogTitle className="text-gray-900 dark:text-[#ECECEC]">
+            Model Capabilities
+          </DialogTitle>
+          <DialogDescription className="text-gray-500 dark:text-[#ECECEC]/70">
+            Configure the capabilities of this model
+          </DialogDescription>
         </DialogHeader>
         <div className="space-y-6 py-4 overflow-y-auto">
           <div className="space-y-4">
-            <h3 className="text-sm font-medium">Core Capabilities</h3>
+            <h3 className="text-sm font-medium text-gray-900 dark:text-[#ECECEC]">
+              Core Capabilities
+            </h3>
             <Toggle
               label="Support Plugins (via OpenAI Functions)"
               description={`Enable if the model supports the "functions" or "tool_calls" parameter.`}
@@ -109,13 +119,18 @@ export function ModelCapabilitiesDialog({
 
           {supportedParams.length > 0 && (
             <div className="space-y-4">
-              <h3 className="text-sm font-medium">Supported Parameters</h3>
+              <h3 className="text-sm font-medium text-gray-900 dark:text-[#ECECEC]">
+                Supported Parameters
+              </h3>
               <div className="space-y-3">
                 {supportedParams.map((param, paramIndex) => (
-                  <label key={paramIndex} className="flex items-center gap-2 text-sm text-gray-700">
+                  <label
+                    key={paramIndex}
+                    className="flex items-center gap-2 text-sm text-gray-700 dark:text-[#ECECEC]"
+                  >
                     <input
                       type="checkbox"
-                      className="h-4 w-4 rounded border-gray-300"
+                      className="h-4 w-4 rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700"
                       checked={param.enabled}
                       onChange={(e) => {
                         const newParams = [...supportedParams];
@@ -135,7 +150,9 @@ export function ModelCapabilitiesDialog({
         </div>
         <DialogFooter className="flex-shrink-0">
           <DialogClose asChild>
-            <Button type="button">Done</Button>
+            <Button type="button" variant="secondary">
+              Done
+            </Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>

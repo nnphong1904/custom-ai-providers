@@ -287,7 +287,7 @@ export function ModelForm({
                   </div>
 
                   {/* Models Table */}
-                  <div className="rounded-lg border border-gray-300 dark:border-gray-500">
+                  <div className="rounded-lg border border-gray-300 dark:border-gray-500 overflow-hidden">
                     <div className="max-h-[400px] overflow-y-auto">
                       <table className="w-full">
                         <thead className="sticky top-0 bg-gray-50 dark:bg-gray-800">
@@ -394,7 +394,7 @@ export function ModelForm({
                                 <td className="p-3">
                                   {form.watch("models").some((m) => m.id === model.id) && (
                                     <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-[#ECECEC]/70">
-                                      <p>Auto detected</p>
+                                      <p className="dark:text-[#ECECEC]">Auto detected</p>
                                       <ModelCapabilitiesDialog
                                         modelIndex={modelIndex}
                                         watch={form.watch}
@@ -613,7 +613,7 @@ export function ModelForm({
             <div>
               <button
                 type="button"
-                className="flex gap-4 items-center  py-4 text-left cursor-pointer hover:bg-gray-50 transition-colors duration-200"
+                className="flex gap-4 items-center py-4 text-left cursor-pointer transition-colors duration-200 hover:[&>span]:text-blue-500 hover:[&>svg]:stroke-blue-500"
                 onClick={() => {
                   const el = document.getElementById("advanced-settings");
                   if (el) {
@@ -628,9 +628,11 @@ export function ModelForm({
                   }
                 }}
               >
-                <span className="text-lg font-semibold dark:text-[#ECECEC]">Advanced Settings</span>
+                <span className="text-lg font-semibold dark:text-[#ECECEC] ">
+                  Advanced Settings
+                </span>
                 <svg
-                  className="w-5 h-5 transition-transform duration-300 transform dark:stroke-[#ECECEC]"
+                  className="w-5 h-5 transition-transform duration-300 transform dark:stroke-[#ECECEC] "
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
