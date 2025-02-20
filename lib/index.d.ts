@@ -2,6 +2,9 @@ import { ReactNode } from "react";
 import { JsonBuilderInput, JsonBuilderOutput } from "@/utils/json-builder";
 import { ModelConfig } from "@/types";
 import { AIProviderInformation } from "@/ai-providers/type";
+import { ModelFormData } from "@/schemas/model-form";
+import { AIProviderName } from "@/ai-providers/type";
+
 export interface AIProvidersProps {
   /**
    * Callback function that receives the model configurations after form submission
@@ -15,4 +18,11 @@ export interface AIProvidersProps {
 export function AIProviders(props: AIProvidersProps): ReactNode;
 
 export function buildModelConfigJson(props: JsonBuilderInput): JsonBuilderOutput[];
-export { ModelConfig, JsonBuilderInput, JsonBuilderOutput, AIProviderInformation };
+export {
+  ModelConfig,
+  JsonBuilderInput,
+  JsonBuilderOutput,
+  AIProviderInformation,
+  ModelFormData,
+  AIProviderName,
+};
