@@ -1,7 +1,7 @@
 import { Input } from "@/components/form/input";
 import { Label } from "@/components/form/label";
 import { Toggle } from "@/components/form/toggle";
-import { UseFormReturn } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import { ModelFormData } from "@/schemas/model-form";
 import { Provider } from "@/types";
 import { providers } from "@/ai-providers";
@@ -17,11 +17,11 @@ const defaultSupportedParams = [
 ];
 
 interface ManualModelConfigProps {
-  form: UseFormReturn<ModelFormData>;
   provider: Provider;
 }
 
-export function ManualModelConfig({ form, provider }: ManualModelConfigProps) {
+export function ManualModelConfig({ provider }: ManualModelConfigProps) {
+  const form = useFormContext<ModelFormData>();
   return (
     <div className="space-y-4">
       <div className="flex space-x-4">
