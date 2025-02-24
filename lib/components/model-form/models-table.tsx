@@ -1,11 +1,10 @@
 import { Input } from "@/components/form/input";
 import { ModelCapabilitiesDialog } from "@/components/model-capabilities-dialog";
-import { UseFormReturn, useFieldArray } from "react-hook-form";
+import { useFieldArray, useFormContext } from "react-hook-form";
 import { ModelFormData } from "@/schemas/model-form";
 import { Model } from "@/types";
 
 interface ModelsTableProps {
-  form: UseFormReturn<ModelFormData>;
   models: Model[];
   filteredModels: Model[];
   searchTerm: string;
@@ -13,12 +12,13 @@ interface ModelsTableProps {
 }
 
 export function ModelsTable({
-  form,
   models,
   filteredModels,
   searchTerm,
   onSearchChange,
 }: ModelsTableProps) {
+  const form = useFormContext<ModelFormData>();
+
   const {
     fields: modelFields,
     append: appendModel,
@@ -156,11 +156,7 @@ export function ModelsTable({
                     {form.watch("models").some((m) => m.id === model.id) && (
                       <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-[#ECECEC]/70">
                         <p className="dark:text-[#ECECEC]">Auto detected</p>
-                        <ModelCapabilitiesDialog
-                          modelId={model.modelId}
-                          watch={form.watch}
-                          setValue={form.setValue}
-                        />
+                        <ModelCapabilitiesDialog modelId={model.modelId} />
                       </div>
                     )}
                   </td>

@@ -10,20 +10,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/form/dialog";
-import { UseFormWatch, UseFormSetValue } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import { ModelFormData } from "@/schemas/model-form";
 
 interface ModelCapabilitiesDialogProps {
   modelId: string;
-  watch: UseFormWatch<ModelFormData>;
-  setValue: UseFormSetValue<ModelFormData>;
 }
 
-export function ModelCapabilitiesDialog({
-  modelId,
-  watch,
-  setValue,
-}: ModelCapabilitiesDialogProps) {
+export function ModelCapabilitiesDialog({ modelId }: ModelCapabilitiesDialogProps) {
+  const { watch, setValue } = useFormContext<ModelFormData>();
+
   const modelIndex = watch(`models`).findIndex((model) => model.modelId === modelId);
   const supportedParams = watch(`models.${modelIndex}.supportedParams`) || [];
 

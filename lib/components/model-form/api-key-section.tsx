@@ -1,20 +1,21 @@
 import { Button } from "@/components/form/button";
 import { Input } from "@/components/form/input";
 import { Label } from "@/components/form/label";
-import { UseFormReturn } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import { ModelFormData } from "@/schemas/model-form";
 import { UseMutationResult } from "@tanstack/react-query";
 import { Provider, Model } from "@/types";
 import { providers } from "@/ai-providers";
 
 interface APIKeySectionProps {
-  form: UseFormReturn<ModelFormData>;
   provider: Provider;
   checkApiKey: UseMutationResult<void, Error, { apiKey: string }, unknown>;
   getModels: UseMutationResult<Model[] | undefined, Error, { apiKey: string }, unknown>;
 }
 
-export function APIKeySection({ form, provider, checkApiKey, getModels }: APIKeySectionProps) {
+export function APIKeySection({ provider, checkApiKey, getModels }: APIKeySectionProps) {
+  const form = useFormContext<ModelFormData>();
+
   return (
     <div className="space-y-2">
       <div className="flex gap-3 w-full">
