@@ -28,7 +28,7 @@ function App() {
             Copy
           </button>
         </div>
-        <pre className="whitespace-pre-wrap text-sm text-gray-700 dark:text-[#ECECEC]/90 bg-gray-50 dark:bg-gray-900 p-4 rounded-md border border-gray-300 dark:border-gray-500">
+        <pre className="whitespace-pre-wrap text-sm text-gray-700 dark:text-white bg-gray-50 dark:bg-gray-900 p-4 rounded-md border border-gray-300 dark:border-gray-500">
           {result ? JSON.stringify(result, null, 2) : "No result yet"}
         </pre>
       </div>

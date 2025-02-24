@@ -14,16 +14,17 @@ import { UseFormWatch, UseFormSetValue } from "react-hook-form";
 import { ModelFormData } from "@/schemas/model-form";
 
 interface ModelCapabilitiesDialogProps {
-  modelIndex: number;
+  modelId: string;
   watch: UseFormWatch<ModelFormData>;
   setValue: UseFormSetValue<ModelFormData>;
 }
 
 export function ModelCapabilitiesDialog({
-  modelIndex,
+  modelId,
   watch,
   setValue,
 }: ModelCapabilitiesDialogProps) {
+  const modelIndex = watch(`models`).findIndex((model) => model.modelId === modelId);
   const supportedParams = watch(`models.${modelIndex}.supportedParams`) || [];
 
   return (

@@ -101,7 +101,7 @@ export function ModelsTable({
               </tr>
             </thead>
             <tbody className="bg-white dark:bg-gray-900">
-              {(filteredModels.length > 0 ? filteredModels : models).map((model, modelIndex) => (
+              {(filteredModels.length > 0 ? filteredModels : models).map((model) => (
                 <tr key={model.id} className="border-b border-gray-300 dark:border-gray-500">
                   <td className="p-3">
                     <input
@@ -157,7 +157,7 @@ export function ModelsTable({
                       <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-[#ECECEC]/70">
                         <p className="dark:text-[#ECECEC]">Auto detected</p>
                         <ModelCapabilitiesDialog
-                          modelIndex={modelIndex}
+                          modelId={model.modelId}
                           watch={form.watch}
                           setValue={form.setValue}
                         />
