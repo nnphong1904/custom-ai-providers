@@ -10,30 +10,21 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/form/dialog";
-import { UseFormWatch, UseFormSetValue, useFieldArray, useFormContext } from "react-hook-form";
+import { UseFormWatch, UseFormSetValue } from "react-hook-form";
 import { ModelFormData } from "@/schemas/model-form";
 
 interface ModelCapabilitiesDialogProps {
-  modelId: string;
+  modelIndex: number;
   watch: UseFormWatch<ModelFormData>;
   setValue: UseFormSetValue<ModelFormData>;
 }
 
 export function ModelCapabilitiesDialog({
-  modelId,
+  modelIndex,
   watch,
   setValue,
 }: ModelCapabilitiesDialogProps) {
-  const form = useFormContext<ModelFormData>();
-
-  const { fields: modelFields } = useFieldArray({
-    control: form.control,
-    name: "models",
-  });
-
-  const model = modelFields.find((model) => model.modelId === modelId);
-  const modelIndex = modelFields.findIndex((model) => model.modelId === modelId);
-  console.log("🚀 ~ modelId:", modelId, modelIndex);
+  const supportedParams = watch(`models.${modelIndex}.supportedParams`) || [];
 
   return (
     <Dialog>
@@ -126,13 +117,13 @@ export function ModelCapabilitiesDialog({
             />
           </div>
 
-          {model?.supportedParams?.length && (
+          {supportedParams.length > 0 && (
             <div className="space-y-4">
               <h3 className="text-sm font-medium text-gray-900 dark:text-[#ECECEC]">
                 Supported Parameters
               </h3>
               <div className="space-y-3">
-                {model?.supportedParams.map((param, paramIndex) => (
+                {supportedParams.map((param, paramIndex) => (
                   <label
                     key={paramIndex}
                     className="flex items-center gap-2 text-sm text-gray-700 dark:text-[#ECECEC]"
@@ -142,7 +133,7 @@ export function ModelCapabilitiesDialog({
                       className="h-4 w-4 rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700"
                       checked={param.enabled}
                       onChange={(e) => {
-                        const newParams = [...(model?.supportedParams ?? [])];
+                        const newParams = [...supportedParams];
                         newParams[paramIndex] = {
                           ...newParams[paramIndex],
                           enabled: e.target.checked,

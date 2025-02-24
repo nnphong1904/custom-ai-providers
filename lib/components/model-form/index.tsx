@@ -1,4 +1,4 @@
-import { FormProvider, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/form/button";
 import { modelFormSchema, type ModelFormData } from "@/schemas/model-form";
@@ -139,64 +139,68 @@ export function ModelForm({
   }, [debouncedSearchTerm, models]);
 
   return (
-    <FormProvider {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
+    <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
+      <div className="space-y-6">
+        <ModelFormHeader provider={provider} />
+
         <div className="space-y-6">
-          <ModelFormHeader provider={provider} />
+          <APIKeySection
+            form={form}
+            provider={provider}
+            checkApiKey={checkApiKey}
+            getModels={getModels}
+          />
 
-          <div className="space-y-6">
-            <APIKeySection provider={provider} checkApiKey={checkApiKey} getModels={getModels} />
-
-            {canGetModels ? (
-              <div className="space-y-2">
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-[#ECECEC]">
-                  Available Models
-                </h2>
-                {!form.watch("apiKey") || !getModels.data?.length ? (
-                  <div className="rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-500 p-8">
-                    <div className="flex flex-col items-center justify-center text-center">
-                      <p className="mt-2 text-sm text-gray-500 dark:text-[#ECECEC]/70">
-                        Please enter your API key to fetch available models
-                      </p>
-                    </div>
+          {canGetModels ? (
+            <div className="space-y-2">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-[#ECECEC]">
+                Available Models
+              </h2>
+              {!form.watch("apiKey") || !getModels.data?.length ? (
+                <div className="rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-500 p-8">
+                  <div className="flex flex-col items-center justify-center text-center">
+                    <p className="mt-2 text-sm text-gray-500 dark:text-[#ECECEC]/70">
+                      Please enter your API key to fetch available models
+                    </p>
                   </div>
-                ) : (
-                  <ModelsTable
-                    models={models}
-                    filteredModels={filteredModels}
-                    searchTerm={searchTerm}
-                    onSearchChange={(value) => setSearchTerm(value)}
-                  />
-                )}
-              </div>
-            ) : (
-              <ManualModelConfig provider={provider} />
-            )}
+                </div>
+              ) : (
+                <ModelsTable
+                  form={form}
+                  models={models}
+                  filteredModels={filteredModels}
+                  searchTerm={searchTerm}
+                  onSearchChange={(value) => setSearchTerm(value)}
+                />
+              )}
+            </div>
+          ) : (
+            <ManualModelConfig form={form} provider={provider} />
+          )}
 
-            <AdvancedSettings />
+          <AdvancedSettings form={form} />
 
-            {/* Submit Button */}
-            <Button
-              type="submit"
-              variant="primary"
-              className="w-full m-0"
-              disabled={
-                form.formState.isSubmitting ||
-                checkApiKey.isPending ||
-                getModels.isPending ||
-                !!form.formState.errors.apiKey?.message
-              }
-            >
-              {form.formState.isSubmitting ? "Adding..." : "Add Model"}
-            </Button>
-            {!checkApiKey.isPending && Object.entries(form.formState.errors)[0] && (
-              <p className="mt-2 text-sm text-red-500">
-                {Object.entries(form.formState.errors)[0][1]?.message}
-              </p>
-            )}
-          </div>
+          {/* Submit Button */}
+          <Button
+            type="submit"
+            variant="primary"
+            className="w-full m-0"
+            disabled={
+              form.formState.isSubmitting ||
+              checkApiKey.isPending ||
+              getModels.isPending ||
+              !!form.formState.errors.apiKey?.message
+            }
+          >
+            {form.formState.isSubmitting ? "Adding..." : "Add Model"}
+          </Button>
+          {!checkApiKey.isPending && Object.entries(form.formState.errors)[0] && (
+            <p className="mt-2 text-sm text-red-500">
+              {Object.entries(form.formState.errors)[0][1]?.message}
+            </p>
+          )}
         </div>
-      </form>
-    </FormProvider>
+      </div>
+    </form>
   );
 }

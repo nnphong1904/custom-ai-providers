@@ -1,10 +1,13 @@
 import { Button } from "@/components/form/button";
 import { Input } from "@/components/form/input";
-import { useFieldArray, useFormContext } from "react-hook-form";
+import { UseFormReturn, useFieldArray } from "react-hook-form";
 import { ModelFormData } from "@/schemas/model-form";
 
-export function AdvancedSettings() {
-  const form = useFormContext<ModelFormData>();
+interface AdvancedSettingsProps {
+  form: UseFormReturn<ModelFormData>;
+}
+
+export function AdvancedSettings({ form }: AdvancedSettingsProps) {
   const {
     fields: headerFields,
     append: appendHeader,
