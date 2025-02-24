@@ -56,7 +56,7 @@ export function ModelsTable({
 
       {/* Models Table */}
       <div className="rounded-lg border border-gray-300 dark:border-gray-500 overflow-hidden">
-        <div className="max-h-[400px] overflow-y-auto">
+        <div className="max-h-[400px] overflow-y-auto scrollbar-thin">
           <table className="w-full">
             <thead className="sticky top-0 bg-gray-50 dark:bg-gray-800">
               <tr className="border-b border-gray-300 dark:border-gray-500">
