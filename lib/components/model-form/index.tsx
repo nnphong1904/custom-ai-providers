@@ -34,6 +34,7 @@ export function ModelForm({
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
   const [filteredModels, setFilteredModels] = useState<Model[]>([]);
+  const [isApiKeyValid, setIsApiKeyValid] = useState(false);
 
   const form = useForm<ModelFormData>({
     resolver: zodResolver(modelFormSchema),
@@ -109,12 +110,12 @@ export function ModelForm({
     },
     onSuccess: () => {
       form.clearErrors("apiKey");
+      setIsApiKeyValid(true);
       getModels.mutate({ apiKey: form.getValues("apiKey") });
     },
     onError: (error) => {
-      form.setError("apiKey", {
-        message: error.message,
-      });
+      setIsApiKeyValid(false);
+      form.setError("apiKey", { message: error.message });
     },
   });
 
@@ -137,6 +138,14 @@ export function ModelForm({
     );
     setFilteredModels(filtered);
   }, [debouncedSearchTerm, models]);
+
+  // Add this effect to watch API key changes
+  useEffect(() => {
+    const apiKey = form.watch("apiKey");
+    if (!apiKey) {
+      setIsApiKeyValid(false);
+    }
+  }, [form]);
 
   return (
     <FormProvider {...form}>
@@ -176,6 +185,9 @@ export function ModelForm({
             <AdvancedSettings />
 
             {/* Submit Button */}
+            {!checkApiKey.isPending && isApiKeyValid && (
+              <p className="mt-2 text-base font-medium text-green-500">🎉 API key is valid!</p>
+            )}
             <Button
               type="submit"
               variant="primary"
@@ -189,11 +201,6 @@ export function ModelForm({
             >
               {form.formState.isSubmitting ? "Adding..." : "Add Model"}
             </Button>
-            {!checkApiKey.isPending && Object.entries(form.formState.errors)[0] && (
-              <p className="mt-2 text-sm text-red-500">
-                {Object.entries(form.formState.errors)[0][1]?.message}
-              </p>
-            )}
           </div>
         </div>
       </form>
